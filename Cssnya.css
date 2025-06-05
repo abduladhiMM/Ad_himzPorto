@@ -1,0 +1,1018 @@
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: "Montserrat", sans-serif;
+
+    text-decoration: none;
+    list-style: none;
+}
+
+body{
+    height: 100vh;
+    background-color: #000;
+    background-image: url('https://images.unsplash.com/photo-1605600389423-2d67e7f877ab?q=80&w=1771&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+    background-size: cover;
+    background-position: center;
+}
+
+/* =================================================== */
+/* ===============  H O M E P A G E  ================= */
+/* =================================================== */
+
+
+/* =============================================== */
+/* ===============  H E A D E R  ================= */
+/* =============================================== */
+
+header{
+    position: relative;
+    padding: 0 2rem;
+    /* backdrop-filter: blur(15px); */
+}
+
+.navbar_logo{
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.navbar_logo:hover{
+    transform: scale(1.1);
+}
+
+.navbar{
+    width: 100%;
+    height: 60px;
+    padding-top: 25px;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+
+li{
+    list-style: none;
+}
+
+.navbar a{
+    text-decoration: none;
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.navbar_menu a{
+    text-decoration: none;
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.navbar_menu a:active{
+    color: #FFBF9B;
+    border-bottom: 3px solid #FFBF9B;
+}
+
+.navbar_menu a:hover,
+.dropdown_menu a:hover{
+    color: #FFBF9B;
+    text-shadow: 0 0 50px #FFBF9B;
+    border-bottom: 3px solid #FFBF9B;
+}
+
+.navbar .navbar_menu {
+    display: flex;
+    gap: 2rem;
+}
+
+.navbar .btn_bar{
+    color: #fff;
+    font-size: 1.5rem;
+    cursor: pointer;
+    display: none;
+
+}
+
+/* =========================== */
+/* ====== Dropdown Menu ====== */
+/* =========================== */
+
+.dropdown_menu{
+    display: none;
+    position: absolute;
+    right: 2rem;
+    top: 60px;
+    height: 0;
+    width: 300px;
+    background-color: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(15px);
+    border-radius: 10px;
+    overflow: hidden;
+    transition: height 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.dropdown_menu a{
+    text-decoration: none;
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.dropdown_menu.open{
+    height: 210px;
+}
+
+.dropdown_menu li{
+    padding: 0.7rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ======================== */
+/* ====== Responsive ====== */
+/* ======================== */
+
+@media(max-width: 800px) {
+    .navbar .navbar_menu{
+        display: none;
+    }
+
+    .navbar .btn_bar{
+        display: block;
+    }
+
+    .dropdown_menu{
+        display: block;
+    }
+}
+
+@media (max-width: 400px){
+    .dropdown_menu{
+        left: 2rem;
+        width: unset;
+    }
+}
+
+
+/* =============================================== */
+/* ===========  S E L E C T I O N  #1  =========== */
+/* =============================================== */
+
+selection{
+    min-height: 80vh;
+    padding: 1rem 9.2% 2rem;
+}
+
+.homepage{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10rem;
+}
+
+.isi_home{
+    display: flex;
+    flex-direction: column;
+    align-items: baseline;
+    text-align: left;
+    justify-content: center;
+    margin-top: 3rem;
+}
+
+.name{
+    font-size: 2.5rem;
+    color: #FFBF9B;
+}
+
+.isi_home h1{
+    font-size: 2rem;
+    font-weight: 700;
+    margin-top: 2.5rem;
+    line-height: 1;
+    color: #fff;
+}
+
+.isi_home h3{
+    margin-bottom: 2rem;
+    margin-top: 1rem;
+    font-size: 1.5rem;
+    color: #fff;
+}
+
+.home_img{
+    border-radius: 50%;
+}
+
+.home_img img{
+    position: relative;
+    top: 3rem;
+    width: 28vw;
+    border-radius: 50%;
+    box-shadow: 0 0 25px var(#fff);
+    cursor: pointer;
+    transition: 0.4s ease-in-out;
+}
+
+.home_img img:hover{
+    box-shadow: 0 0 25px var(#fff),
+                0 0 50px var(#fff),
+                0 0 100px var(#fff);
+}
+
+.isi_home p{
+    font-size: 1rem;
+    font-weight: 500;
+    line-height: 1.2;
+    max-width: 1000px;
+    color: #fff;
+}
+
+.social_media_icon a{
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 3rem;
+    height: 3rem;
+    background: transparent;
+    border: 2px solid #fff;
+    font-size: 1.5rem;
+    border-radius: 50%;
+    color: #fff;
+    margin: 3rem 2rem 3rem 0;
+    transition: 0.3s ease-in-out;
+}
+
+.social_media_icon a:hover{
+    color: #FFBF9B;
+    transform: scale(1.3)translateY(-5px);
+    box-shadow: 0 0 25px #fff;
+    background-color: #FFBF9B;
+}
+
+.homepage .btn{
+    display: inline-block;
+    padding: 1rem 2.8rem;
+    background: #082c41;
+    box-shadow: 0 0 25px #fff;
+    border-radius: 4rem;
+    font-size: 1rem;
+    color: #fff;
+    border: 2px solid transparent;
+    letter-spacing: 0.1rem;
+    transition: 0.3s ease-in-out;
+    cursor: pointer;
+    font-weight: 700;
+}
+
+.homepage .btn:hover{
+    transform: scale(1.05);
+    font-weight: 800;
+    box-shadow: 0 0 50px #FFBF9B;
+    border: 2px solid #FFBF9B;
+    color: #FFBF9B;
+}
+
+.homepage .btn_group{
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+.homepage .btn_group a:nth-of-type(2){
+    background-color: #FFBF9B;
+    color: #fff;
+    border: 2px solid #FFBF9B;
+    box-shadow: 0 0 25px transparent;
+}
+
+.homepage .btn_group a:nth-of-type(2):hover{
+    box-shadow: 0 0 25px #FFBF9B;
+    background-color: #fff;
+    color: #082c41;
+}
+
+.text_animasi{
+    font-size: 34px;
+    font-weight: 600;
+    min-width: 280px;
+}
+
+.text_animasi span{
+    position: relative;
+}
+
+.text_animasi span::before{
+    content: "Web Developer";
+    color: #FFBF9B;
+    animation: words 20s infinite;
+}
+
+.text_animasi span::after{
+    content: "";
+    background-color: #188559;
+    position: absolute;
+    width: calc(100% + 8px);
+    height: 100%;
+    border-left: 3px solid #082c41;
+    right: -8px;
+    animation: cursor 0.6s infinite, typing 20s steps(14) infinite;
+}
+
+@keyframes cursor{
+    to{
+        border-left: 2px solid #FFBF9B;
+    }
+}
+
+@keyframes words{
+    0%,
+    25%{
+        content: "Grapich Designer";
+    }
+    26%,
+    50%{
+        content: "Web Designer";
+    }
+    51%,
+    75%{
+        content: "UI/UX Designer";
+    }
+    76%,
+    100%{
+        content: "Web Developer";
+    }
+}
+@keyframes typing{
+    10%,
+    15%,
+    30%,
+    35%,
+    50%,
+    55%,
+    70%,
+    75%,
+    90%,
+    95%{
+        width: 0;
+    }
+    5%,
+    20%,
+    25%,
+    40%,
+    45%,
+    60%,
+    65%,
+    80%,
+    85%{
+        width: calc(100% + 8px);
+    }
+}
+
+
+/* =============================================== */
+/* ===========  S E L E C T I O N  #2  =========== */
+/* =============================================== */
+
+.homepage2{
+    display: flex;
+    background-color: #fff;
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+
+    width: 100%;
+    min-height: 20vh;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+
+}
+
+.LWT{
+    text-align: center;
+}
+
+.LWT_desain{
+    background-image: url('https://images.unsplash.com/photo-1605600389423-2d67e7f877ab?q=80&w=1771&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+    padding: 5px 10px;
+    border-radius: 5px;
+    color: #fff;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+
+    font-size: 2rem;
+    font-weight: 750;
+}
+
+.homepage2 .btn_contact{
+    display: inline-block;
+    padding: 1rem 2.8rem;
+    background: #082c41;
+    box-shadow: 0 0 25px #fff;
+    border-radius: 4rem;
+    font-size: 1rem;
+    color: #fff;
+    border: 2px solid transparent;
+    letter-spacing: 0.1rem;
+    transition: 0.3s ease-in-out;
+    cursor: pointer;
+    font-weight: 700;
+}
+
+.homepage2 .btn_contact:hover{
+    transform: scale(1.05);
+    box-shadow: 0 0 30px #FFBF9B;
+    font-weight: 800;
+    color: #FFBF9B;
+}
+
+.homepage2 .btn_homepage2{
+    display: flex;
+    align-items: center;
+    margin-top: 2rem;
+    padding-left: 25%;
+}
+
+
+
+/* =============================================== */
+/* ================  F O O T E R  ================ */
+/* =============================================== */
+
+.footer{
+    position: relative;
+    bottom: 0;
+    width: 100%;
+    padding: 40px 0;
+    background-color: #333;
+}
+
+.footer .social{
+    text-align: center;
+    padding-bottom: 25px;
+    color: #fff;
+}
+
+.footer .social a{
+    font-size: 25px;
+    color: #fff;
+    border: 2px solid #FFBF9B;
+    width: 42px;
+    height: 42px;
+    line-height: 42px;
+    display: inline-block;
+    text-align: center;
+    border-radius: 50%;
+    margin: 0 10px;
+    transition: 0.3s ease-in-out;
+}
+
+.footer .social a:hover{
+    transform: scale(1.1) translateY(-10px);
+    background-color: #FFBF9B;
+    color: #082c41;
+}
+
+.footer ul{
+    margin-top: 0;
+    padding: 0;
+    font-size: 18px;
+    line-height: 1.6;
+    margin-bottom: 0;
+    text-align: center;
+}
+
+.footer ul li a{
+    color: #fff;
+    border-bottom: 3px solid transparent;
+    transition: 0.3s ease-in-out;
+}
+
+.footer ul li a:hover{
+    border-bottom: 3px solid #FFBF9B;
+}
+
+.footer ul li{
+    display: inline-block;
+    padding: 0 15px;
+}
+
+.footer .copyright{
+    margin-top: 50px;
+    text-align: center;
+    font-size: 16px;
+    color: #fff;
+}
+
+
+/* ================================================== */
+/* ===============  A B O U T  M E  ================= */
+/* ================================================== */
+
+
+/* =============================================== */
+/* ===========  S E L E C T I O N  #1  =========== */
+/* =============================================== */
+
+selection{
+    min-height: 80vh;
+    padding: 1rem 9.2% 2rem;
+}
+
+.about_me{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10rem;
+}
+
+.about_text{
+    display: flex;
+    flex-direction: column;
+    align-items: baseline;
+    text-align: left;
+    justify-content: center;
+    margin-top: 3rem;
+}
+
+.name{
+    font-size: 2.5rem;
+    color: #FFBF9B;
+}
+
+.about_text h1{
+    font-size: 2rem;
+    font-weight: 700;
+    margin-top: 2.5rem;
+    line-height: 1;
+    color: #fff;
+}
+
+.home_img{
+    border-radius: 50%;
+}
+
+.home_img img{
+    position: relative;
+    top: 3rem;
+    width: 28vw;
+    border-radius: 50%;
+    box-shadow: 0 0 25px var(#fff);
+    cursor: pointer;
+    transition: 0.4s ease-in-out;
+}
+
+.home_img img:hover{
+    box-shadow: 0 0 25px var(#fff),
+                0 0 50px var(#fff),
+                0 0 100px var(#fff);
+}
+
+.about_text p{
+    padding-top: 3%;
+    font-size: 1rem;
+    font-weight: 500;
+    line-height: 1.8;
+    max-width: 1000px;
+    color: #fff;
+}
+
+.about_me .btn_group_about{
+    display: flex;
+    align-items: center;
+    padding-top: 7%;
+}
+
+.about_me .btn_cv{
+    display: inline-block;
+    padding: 1rem 2.8rem;
+    background: #082c41;
+    box-shadow: 0 0 25px #fff;
+    border-radius: 4rem;
+    font-size: 1rem;
+    color: #fff;
+    border: 2px solid transparent;
+    letter-spacing: 0.1rem;
+    transition: 0.3s ease-in-out;
+    cursor: pointer;
+    font-weight: 700;
+}
+
+.about_me .btn_cv:hover{
+    transform: scale(1.05);
+    font-weight: 800;
+    box-shadow: 0 0 50px #FFBF9B;
+    border: 2px solid #FFBF9B;
+    color: #FFBF9B;
+}
+
+
+/* =============================================== */
+/* ===========  S E L E C T I O N  #2  =========== */
+/* =============================================== */
+
+.heading_education{
+    font-size: 3rem;
+    text-align: center;
+    margin: 2rem 0;
+    color: #082c41;
+}
+
+.pendidikan{
+    padding: 80px 15px;
+    background-color: #fff;
+}
+
+.pendidikan h2{
+    margin-bottom: 5rem;
+}
+
+.timeline_items{
+    max-width: 1200px;
+    margin: auto;
+    display: flex;
+    flex-wrap: wrap;
+    position: relative;
+}
+
+.timeline_items::before{
+    content: "";
+    position: absolute;
+    width: 5px;
+    height: 100%;
+    background-color: #082c41;
+    left: calc(50% - 1px);
+}
+
+.timeline_item{
+    margin-bottom: 40px;
+    width: 100%;
+    position: relative;
+}
+
+.timeline_item:last-child{
+    margin-bottom: 0;
+}
+
+.timeline_item:nth-child(odd){
+    padding-right: calc(50% + 30px);
+    text-align: right;
+}
+
+.timeline_item:nth-child(even){
+    padding-left: calc(50% + 30px);
+}
+
+.timeline_dot{
+    height: 20px;
+    width: 20px;
+    background-color: #082c41;
+    box-shadow: 0 0 25px #082c41,
+                0 0 50px #082c41;
+    position: absolute;
+    left: calc(50% - 8px);
+    border-radius: 50%;
+    top: 10px;
+}
+
+.timeline_date{
+    font-size: 20px;
+    font-weight: 800;
+    color: #082c41;
+    margin: 6px 0 15px;
+}
+
+.timeline_content{
+    background-color: #082c41;
+    border: 3px solid #082c41;
+    padding: 30px 50px;
+    border-radius: 2rem;
+    box-shadow: 0 0 10px #FFBF9B;
+    cursor: pointer;
+    transition: 0.3s ease-in-out;
+}
+
+.timeline_content:hover{
+    transform: scale(1.05);
+    border: 3px solid #FFBF9B;
+    box-shadow: 0 0 25px #FFBF9B;
+}
+
+.timeline_content h3{
+    font-size: 20px;
+    color: #FFBF9B;
+    margin: 0 0 10px;
+    font-weight: 600;
+}
+
+.timeline_content p{
+    color: #FFBF9B;
+    font-size: 16px;
+    font-weight: 300;
+    line-height: 22px;
+}
+
+::-webkit-scrollbar{
+    width: 15px;
+}
+::-webkit-scrollbar-thumb{
+    background-color: #082c41;
+}
+::-webkit-scrollbar-track{
+    background-color: #FFBF9B;
+    width: 50px;
+}
+
+
+/* =================================================== */
+/* ===============  S E R V I C E S  ================= */
+/* =================================================== */
+
+
+/* =============================================== */
+/* ===========  S E L E C T I O N  #1  =========== */
+/* =============================================== */
+
+.services{
+    color: #333;
+}
+
+.services h2{
+    font-size: 3rem;
+    text-align: left;
+    margin: 5rem 8rem;
+    margin-bottom: 2rem;
+    color: #fff;
+}
+
+.services_container{
+    padding: 0 2rem;
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    align-items: center;
+    margin: 2rem 6rem;
+    gap: 2rem;
+}
+
+.service_box{
+    background-color: #FFBF9B;
+    width: 600px;
+    height: 250px;
+    border-radius: 2rem;
+    border: 5px solid transparent;
+    cursor: pointer;
+    transition: 0.4s ease-in-out;
+}
+
+.service_box:hover{
+    background-color: #fff;
+    color: #082c41;
+    border: 3px solid #082c41;
+    transform: scale(1.03);
+}
+
+.service_box .service_info{
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    max-height: 180px;
+    justify-content: left;
+    align-items: baseline;
+    padding: 3rem 3rem;
+}
+
+.service_info h4{
+    font-size: 2.2rem;
+    font-weight: 600;
+    line-height: 1.7;
+}
+
+.service_info p{
+    font-size: 1rem;
+    font-weight: 600;
+    max-height: 100px;
+    line-height: 1.7;
+    margin: auto;
+}
+
+
+
+/* =================================================== */
+/* ===============  P R O J E C T S  ================= */
+/* =================================================== */
+
+
+/* =============================================== */
+/* ===========  S E L E C T I O N  #1  =========== */
+/* =============================================== */
+
+.container_projects{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 2rem;
+    width: 1200px;
+    height: 600px;
+}
+
+.slide{
+    border-radius: 2rem;
+}
+
+.container_projects .slide .item_slide{
+    width: 200px;
+    height: 300px;
+    position: absolute;
+    top: 50%;
+    transform: translate(0, -50%);
+    border-radius: 20px;
+    box-shadow: 0 20px 30px #082c41;
+    background-position: 50% 50%;
+    background-size: cover;
+    display: inline-block;
+    transition: 0.5s;
+}
+
+.slide .item_slide:nth-child(1),
+.slide .item_slide:nth-child(2){
+    top: 0;
+    left: 0;
+    transform: translate(0, 0);
+    border-radius: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.slide .item_slide:nth-child(3){
+    left: 50%;
+}
+
+.slide .item_slide:nth-child(4){
+    left: calc(50% + 220px);
+}
+
+.slide .item_slide:nth-child(5){
+    left: calc(50% + 440px);
+}
+
+.slide .item_slide:nth-child(n + 6){
+    left: calc(50% + 660px);
+    opacity: o;
+}
+
+.item_slide .content_slide{
+    position: absolute;
+    top: 50%;
+    left: 100px;
+    width: 350px;
+    text-align: left;
+    color: #FFBF9B;
+    transform: translate(0, -50%);
+    display: none;
+}
+
+.slide .item_slide:nth-child(2) .content_slide{
+    display: block;
+}
+
+.content_slide .name_content{
+    font-size: 40px;
+    text-transform: uppercase;
+    font-weight: bold;
+    opacity: 0;
+    animation: animate 1s ease-in-out 1 forwards;
+}
+
+.content_slide .des{
+    margin-top: 10px;
+    margin-bottom: 20px;
+    opacity: 0;
+    animation: animate 1s ease-in-out 0.3s 1 forwards;
+}
+
+.content_slide button{
+    padding: 10px 20px;
+    border: none;
+    background-color: #FFBF9B;
+    color: #082c41;
+    cursor: pointer;
+    opacity: 0;
+    animation: animate 1s ease-in-out 0.6s 1 forwards;
+}
+
+@keyframes animate{
+    from{
+        opacity: 0;
+        transform: translate(0, 100px);
+        filter: blur(33px);
+    }
+
+    to{
+        opacity: 1;
+        transform: translate(0);
+        filter: blur(0);
+    }
+}
+
+.btn_projectss{
+    width: 100%;
+    text-align: center;
+    position: absolute;
+    bottom: 20px;
+}
+
+.btn_projectss button{
+    width: 40px;
+    height: 35px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    margin: 0 5px;
+    border: 1px solid #FFBF9B;
+    transition: 0.3s;
+}
+
+.btn_projectss button:hover{
+    background: #FFBF9B;
+    color: #fff;
+}
+
+
+
+/* =================================================== */
+/* ===============  C O N T A C T S  ================= */
+/* =================================================== */
+
+
+/* =============================================== */
+/* ===========  S E L E C T I O N  #1  =========== */
+/* =============================================== */
+
+.contact h2{
+    margin-bottom: 2rem;
+    font-size: 3rem;
+    text-align: left;
+    margin: 5rem 8rem;
+    margin-bottom: 2rem;
+    color: #fff;
+}
+
+.contact form{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5rem;
+    margin: 3rem auto;
+    text-align: center;
+}
+
+.contact form .input_box{
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.contact form .input_box input,
+.contact form textarea{
+    width: 100%;
+    padding: 1.5rem;
+    font-size: 1.1rem;
+    color: #082c41;
+    border-radius: 1rem;
+    border: 2px solid #FFBF9B;
+    margin: 1.5rem 0;
+    resize: none;
+}
+
+
+.contact form .btn_contacts2{
+    display: inline-block;
+    padding: 1rem 2.8rem;
+    background: #FFBF9B;
+    box-shadow: 0 0 25px #fff;
+    border-radius: 4rem;
+    font-size: 1rem;
+    color: #082c41;
+    border: 2px solid transparent;
+    letter-spacing: 0.1rem;
+    transition: 0.3s ease-in-out;
+    cursor: pointer;
+    font-weight: 700;
+    margin-top: 1rem;
+}
+
+.contact form .btn_contacts2:hover{
+    transform: scale(1.05);
+    font-weight: 800;
+    background-color: #fff;
+    box-shadow: 0 0 50px #FFBF9B;
+    border: 2px solid #fff;
+    color: #082c41;
+}

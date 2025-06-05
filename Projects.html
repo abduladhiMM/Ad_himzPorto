@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projects | Ad_himZ Porto</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        montserrat: ['"Montserrat"', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: '#FFBF9B',
+                        secondary: '#082c41',
+                    },
+                    animation: {
+                        'typing': 'typing 3.5s steps(40, end)',
+                        'blink-caret': 'blink-caret 0.75s step-end infinite',
+                        'orbiting-shadow': 'orbiting-shadow 4s linear infinite',
+                    },
+                    keyframes: {
+                        'typing': {
+                            'from': { width: '0' },
+                            'to': { width: '100%' }
+                        },
+                        'blink-caret': {
+                            'from, to': { 'border-color': 'transparent' },
+                            '50%': { 'border-color': '#FFBF9B' }
+                        },
+                        'orbiting-shadow': {
+                            '0%': { 'box-shadow': '15px 0 20px -5px rgba(255, 255, 255, 0.7)' },
+                            '25%': { 'box-shadow': '0 15px 20px -5px rgba(255, 255, 255, 0.7)' },
+                            '50%': { 'box-shadow': '-15px 0 20px -5px rgba(255, 255, 255, 0.7)' },
+                            '75%': { 'box-shadow': '0 -15px 20px -5px rgba(255, 255, 255, 0.7)' },
+                            '100%': { 'box-shadow': '15px 0 20px -5px rgba(255, 255, 255, 0.7)' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    
+    <!-- Vue.js -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    
+    <!-- Lenis for smooth scrolling -->
+    <script src="https://unpkg.com/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+
+    <!-- Lordicon -->
+    <script src="https://cdn.lordicon.com/lordicon.js"></script>
+    
+    <!-- Swiper JS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    
+    <style>
+        /* Custom CSS for responsiveness */
+        @media (max-width: 768px) {
+            .navbar_menu {
+                display: none;
+            }
+            
+            .btn_bar {
+                display: block;
+            }
+            
+            .social_media_icon {
+                justify-content: center;
+            }
+            
+            .footer .list li {
+                display: block;
+                padding: 0.5rem 0;
+            }
+
+            /* Project slider adjustments for mobile */
+            .swiper-slide {
+                height: 400px;
+            }
+            
+            .content_slide {
+                padding: 20px;
+                width: 80%;
+            }
+            
+            .name_content {
+                font-size: 0.95rem !important;
+                margin-bottom: 0.5rem;
+            }
+            
+            .des {
+                display: none !important;
+            }
+
+            .content_slide .name_content { /* Lebih spesifik */
+                font-size: 0.95rem;
+            }
+
+            .content_slide button {
+                padding: 8px 16px;
+                font-size: 0.9rem;
+            }
+            
+            .swiper-button-next, 
+            .swiper-button-prev {
+                width: 40px;
+                height: 40px;
+            }
+            
+            .swiper-button-next::after, 
+            .swiper-button-prev::after {
+                font-size: 1.2rem;
+            }
+
+            .swiper-container {
+                height: 500px;
+            }
+        }
+        
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .swiper-slide {
+                height: 500px;
+            }
+            
+            .content_slide {
+                width: 80%;
+                padding: 25px;
+                left: 10%;
+                bottom: 30px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .swiper-slide {
+                height: 350px;
+            }
+            
+            .content_slide {
+                width: 90%;
+                padding: 15px;
+            }
+            
+            .name_content {
+                font-size: 1rem;
+            }
+            
+            .des {
+                font-size: 0.75rem;
+            }
+
+            .swiper-container {
+                height: 450px;
+            }
+        }
+
+        @keyframes orbiting-shadow {
+            0% {
+                box-shadow: 15px 0 20px -5px rgba(255, 255, 255, 0.7);
+            }
+            25% {
+                box-shadow: 0 15px 20px -5px rgba(255, 255, 255, 0.7);
+            }
+            50% {
+                box-shadow: -15px 0 20px -5px rgba(255, 255, 255, 0.7);
+            }
+            75% {
+                box-shadow: 0 -15px 20px -5px rgba(255, 255, 255, 0.7);
+            }
+            100% {
+                box-shadow: 15px 0 20px -5px rgba(255, 255, 255, 0.7);
+            }
+        }
+
+        /* Project slider styles */
+        .container_projects {
+            position: relative;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        .swiper {
+            width: 100%;
+            height: 100%;
+            border-radius: 15px;
+        }
+        
+        .swiper-slide {
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .swiper-container {
+            width: 100%;
+            height: 600px;
+            border-radius: 15px;
+            overflow: hidden;
+            margin-bottom: 40px;
+            position: relative;
+        }
+        
+        .swiper-slide::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+            border-radius: 15px;
+        }
+        
+        .content_slide {
+            position: absolute;
+            /* Center both horizontally and vertically */
+            left: 50%;
+            top: 70%;
+            transform: translate(-50%, -50%);
+            width: 60%;
+            padding: 30px;
+            background: rgba(8, 44, 65, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            border: 2px solid rgba(255, 191, 155, 0.3);
+            transition: all 0.3s ease;
+            z-index: 10;
+            text-align: center; /* Untuk teks di dalamnya */
+        }
+        
+        .content_slide:hover {
+            border-color: #FFBF9B;
+            box-shadow: 0 0 20px rgba(255, 191, 155, 0.5);
+        }
+        
+        .name_content {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #FFBF9B;
+            margin-bottom: 1rem;
+        }
+        
+        .des {
+            font-size: 1rem;
+            color: #fff;
+            margin-bottom: 1.5rem;
+            line-height: 1.5;
+        }
+        
+        .content_slide button {
+            padding: 10px 20px;
+            background: #FFBF9B;
+            color: #082c41;
+            border: none;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .content_slide button:hover {
+            background: #082c41;
+            color: #FFBF9B;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255, 191, 155, 0.4);
+        }
+
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            height: 0;
+            overflow: hidden;
+        }
+
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        /* Swiper navigation buttons */
+        .swiper-button-next, 
+        .swiper-button-prev {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: #082c41;
+            color: #FFBF9B;
+            transition: all 0.3s ease;
+        }
+        
+        .swiper-button-next:hover, 
+        .swiper-button-prev:hover {
+            background: #FFBF9B;
+            color: #082c41;
+            transform: scale(1.1);
+        }
+        
+        .swiper-button-next::after, 
+        .swiper-button-prev::after {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        /* Swiper pagination */
+        .swiper-pagination-bullet {
+            width: 12px;
+            height: 12px;
+            background: #fff;
+            opacity: 0.5;
+        }
+        
+        .swiper-pagination-bullet-active {
+            background: #FFBF9B;
+            opacity: 1;
+        }
+
+        /* Animasi garis bawah menu */
+        .navbar_menu li a {
+            position: relative;
+            padding-bottom: 2px;
+        }
+
+        .navbar_menu li a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: #FFBF9B;
+            transition: width 0.3s ease;
+        }
+
+        .navbar_menu li a:hover::after {
+            width: 100%;
+        }
+
+        .navbar_menu li a.active::after {
+            width: 100%;
+        }
+
+        /* Untuk menu dropdown */
+        .dropdown_menu li a {
+            position: relative;
+            padding-bottom: 2px;
+        }
+
+        .dropdown_menu li a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: #FFBF9B;
+            transition: width 0.3s ease;
+        }
+
+        .dropdown_menu li a:hover::after {
+            width: 100%;
+        }
+
+        /* Animasi garis bawah footer */
+        .footer .list li a {
+            position: relative;
+            padding-bottom: 2px;
+        }
+
+        .footer .list li a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: #FFBF9B;
+            transition: width 0.3s ease;
+        }
+
+        .footer .list li a:hover::after {
+            width: 100%;
+        }
+
+        /* Scrollbar styles */
+        ::-webkit-scrollbar {
+            width: 15px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background-color: #082c41;
+        }
+        ::-webkit-scrollbar-track {
+            background-color: #FFBF9B;
+            width: 50px;
+        }
+
+        /* Fix for footer */
+        .footer {
+            position: relative;
+            width: 100%;
+            background: #082c41 !important;
+            margin-top: auto;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Header styles */
+        header {
+            position: relative;
+            z-index: 100;
+        }
+
+        .navbar {
+            position: relative;
+            z-index: 100;
+        }
+    </style>
+</head>
+
+<body class="font-montserrat bg-black bg-[url('https://images.unsplash.com/photo-1605600389423-2d67e7f877ab?q=80&w=1771&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')] bg-cover bg-center">
+    <div id="app" class="flex flex-col min-h-screen">
+        <!-- Header + NavBar -->
+        <header class="relative px-4 sm:px-8 z-50">
+            <div class="navbar max-w-6xl h-16 pt-6 mx-auto flex items-center justify-between">
+                <div class="navbar_logo cursor-pointer transition-all duration-300 ease-in-out hover:scale-110">
+                    <a href="#">
+                        <img src="C:\xampp\htdocs\Sems 6\Ad_himzPorTo\Files\images\LogoV2.2.png" alt="Logo" class="w-16 md:w-24">
+                    </a>
+                </div>
+
+                <ul class="navbar_menu hidden md:flex gap-4 lg:gap-8">
+                    <li><a href="Homepage.html" class="text-white text-sm lg:text-base font-semibold hover:text-primary active:text-primary">Home</a></li>
+                    <li><a href="AboutMe.html" class="text-white text-sm lg:text-base font-semibold hover:text-primary active:text-primary">About Me</a></li>
+                    <li><a href="Services.html" class="text-white text-sm lg:text-base font-semibold hover:text-primary active:text-primary">Services</a></li>
+                    <li><a href="Projects.html" class="text-white text-sm lg:text-base font-semibold hover:text-primary active:text-primary">Projects</a></li>
+                    <li><a href="Contacts.html" class="text-white text-sm lg:text-base font-semibold hover:text-primary active:text-primary">Contact</a></li>
+                </ul>
+
+                <div class="btn_bar md:hidden text-white text-2xl cursor-pointer">
+                    <i class="fa-solid fa-bars"></i>
+                </div>
+            </div>
+
+            <div class="dropdown_menu hidden absolute right-4 sm:right-8 top-16 w-64 sm:w-72 bg-white/10 backdrop-blur-lg rounded-xl overflow-hidden transition-all duration-200 ease-[cubic-bezier(0.175,0.885,0.32,1.275)] h-0">
+                <li class="py-3 flex items-center justify-center"><a href="Homepage.html" class="text-white text-base font-semibold hover:text-primary">Home</a></li>
+                <li class="py-3 flex items-center justify-center"><a href="AboutMe.html" class="text-white text-base font-semibold hover:text-primary">About Me</a></li>
+                <li class="py-3 flex items-center justify-center"><a href="Services.html" class="text-white text-base font-semibold hover:text-primary">Services</a></li>
+                <li class="py-3 flex items-center justify-center"><a href="Projects.html" class="text-white text-base font-semibold hover:text-primary">Projects</a></li>
+                <li class="py-3 flex items-center justify-center"><a href="Contacts.html" class="text-white text-base font-semibold hover:text-primary">Contact</a></li>
+            </div>
+        </header>
+
+        <!-- All My Project -->
+        <main class="flex-grow z-10">
+            <section class="projects-section py-12 px-4 sm:px-8">
+                <div class="container_projects">
+                    <h1 class="text-white text-3xl md:text-4xl font-bold text-center mb-8 leading-none">All <span class="text-primary text-3xl md:text-4xl lg:text-5xl gap-2">My Project</span></h1>
+                    
+                    <!-- Swiper container -->
+                    <div class="swiper-container">
+                        <div class="swiper-wrapper">
+                            <!-- Slides -->
+                            <div class="swiper-slide" style="background-image: url('https://www.dropbox.com/scl/fi/azpds8z7s1nz0y89vsrwq/Desain-Figma.png?rlkey=i0bv1u23su65vd89857ko2vot&st=rcl3q32u&raw=1');">
+                                <div class="content_slide">
+                                    <div class="name_content">WeddingKita Mobile App UI Design</div>
+                                    <div class="des">Smartphone application design with e-commerce 
+                                                    concept for wedding equipment. Created using
+                                                    Figma. It is a collaboration project between me and the team.
+                                                </div>
+                                    <button class="mt-2">See More</button>
+                                </div>
+                            </div>
+
+                            <div class="swiper-slide" style="background-image: url('https://www.dropbox.com/scl/fi/9xn8refm8l99qgah8s1jo/Poster.png?rlkey=8vsz44dm4a6e9k5v4ab1z7hqg&st=bm90gox6&raw=1');">
+                                <div class="content_slide">
+                                    <div class="name_content">"Mizuu" Mineral Water Product Design Poster</div>
+                                    <div class="des">This poster of the engineered product is the result of the
+                                                    course assignment "Multimedia." Created using CorelDRAW individually.
+                                                </div>
+                                    <button class="mt-2">See More</button>
+                                </div>
+                            </div>
+
+                            <div class="swiper-slide" style="background-image: url('https://www.dropbox.com/scl/fi/lyzfo5yar60s3ns4j1blk/Poster-2.png?rlkey=a4qa2sjg3xyfo05wn2ggm45qp&st=r9i222cc&raw=1');">
+                                <div class="content_slide">
+                                    <div class="name_content">Poster Design With Manipulation Concept</div>
+                                    <div class="des">The manipulation-themed poster is the result 
+                                                    of the course assignment "Multimedia." Created using Adobe
+                                                    Photoshop individually.
+                                                </div>
+                                    <button class="mt-2">See More</button>
+                                </div>
+                            </div>
+
+                            <div class="swiper-slide" style="background-image: url('https://www.dropbox.com/scl/fi/ednkrq3urm4ndbsiinast/Template-Sertif-Panitia.png?rlkey=zccj9pkckakoeleqhxghah8v8&st=5mwmk92v&raw=1');">
+                                <div class="content_slide">
+                                    <div class="name_content">Certificate Design of the XIth PRJ x HT Event</div>
+                                    <div class="des">Certificate design "PRJ X HT ke-XI" is an annual event organized by
+                                                    the Computer Science Student Association FMIPA University Lampung.
+                                                    Made with Adobe Photoshop individually.
+                                                </div>
+                                    <button class="mt-2">See More</button>
+                                </div>
+                            </div>
+
+                            <div class="swiper-slide" style="background-image: url('https://www.dropbox.com/scl/fi/kbl755fi0jxcn5uipfnqq/Backgorund-Zoom.png?rlkey=31ml93wvf5eb4aamcewyeshi8&st=vz9mxjql&raw=1');">
+                                <div class="content_slide">
+                                    <div class="name_content">Background Zoom of the XIth PRJ x HT Event</div>
+                                    <div class="des">Background design for the online meeting "PRJ X HT XI" 
+                                                    which was used during the opening of the event. Created 
+                                                    using Adobe Photoshop individually.
+                                                </div>
+                                    <button class="mt-2">See More</button>
+                                </div>
+                            </div>
+
+                            <div class="swiper-slide" style="background-image: url('https://www.dropbox.com/scl/fi/aqm1yltjbcjxaxvmzt7g6/Blender.png?rlkey=2h18090t7fk8r6jsme2k4av0g&st=uiftvbtn&raw=1');">
+                                <div class="content_slide">
+                                    <div class="name_content">Classic House 3D Design</div>
+                                    <div class="des">This is a team project to fulfill the requirement
+                                                    to pass the Multimedia course. Created using Blender.
+                                                </div>
+                                    <button class="mt-2">See More</button>
+                                </div>
+                            </div>
+
+                            <div class="swiper-slide" style="background-image: url('https://www.dropbox.com/scl/fi/lwv9ehof79kzek60xr6u6/KWI-2.png?rlkey=tjy74be8d25lhswq94j01aqes&st=c73z84ep&raw=1');">
+                                <div class="content_slide">
+                                    <div class="name_content">KWI-XXXIII Video Highlight</div>
+                                    <div class="des">This is a highlight video project of KWI-XXXIII
+                                                    activities. It was created using Capcut and Filmora 
+                                                    12 software independently.
+                                                </div>
+                                    <button class="mt-2">See More</button>
+                                </div>
+                            </div>
+
+                            <div class="swiper-slide" style="background-image: url('https://www.dropbox.com/scl/fi/ubqazl4pvxv9rl5c9h9kr/video-2.png?rlkey=5x5nlpvcnhmj02qgvvvc3w74p&st=nin0xm24&raw=1');">
+                                <div class="content_slide">
+                                    <div class="name_content">Don't Forget to Check Your DPT Video</div>
+                                    <div class="des">Video assignment for the "Communication and Presentation" course where
+                                                    we were asked to make a video about elections.  Made using Adobe Premiere Pro.
+                                                </div>
+                                    <button class="mt-2">See More</button>
+                                </div>
+                            </div>
+
+                            <div class="swiper-slide" style="background-image: url('https://www.dropbox.com/scl/fi/ylro97unwlih9l13w1syg/StudLap.webp?rlkey=59378dz16cyp1ryjj60y2ynfs&st=q4r0hy8c&raw=1');">
+                                <div class="content_slide">
+                                    <div class="name_content">Cinematic Field Study Video</div>
+                                    <div class="des">This video is the result of a 5-day, 4-night field study filled with excitement. It was edited using CapCut Desktop.
+                                                </div>
+                                    <button class="mt-2">See More</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Swiper navigation buttons -->
+                        <div class="swiper-button-next"></div>
+                        <div class="swiper-button-prev"></div>
+                        
+                        <!-- Swiper pagination -->
+                        <div class="swiper-pagination"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Project Grid -->
+            <section class="homepage px-[5%] sm:px-[9.2%] py-4 flex flex-col items-center">
+                <!-- Project Grid -->
+                <div class="skills-grid w-full mt-20 md:mt-28 max-w-6xl">
+                    <h1 class="text-white text-3xl md:text-4xl font-bold text-center mb-8 leading-none">All New <span class="text-primary text-3xl md:text-4xl lg:text-5xl gap-2">My Project</span></h1>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+                        <!-- Project 1 -->
+                        <div class="skill-card bg-white/10 backdrop-blur-md rounded-2xl p-6 border-2 border-primary/20 hover:border-primary transition-all duration-300 hover:scale-[1.02] group">
+                            <div class="video-container mb-4 relative pb-[56.25%] h-0 overflow-hidden rounded-lg">
+                                <iframe src="https://1drv.ms/p/c/6132419a28776d5d/IQSGuPlU59nYQpbj9lMmZZI9ARJDAiCkZ59fzZ7k9gqvXxM" width="402" height="327" frameborder="0" scrolling="no"></iframe>
+                            </div>
+                            <div class="video-container mb-4 relative pb-[56.25%] h-0 overflow-hidden rounded-lg">
+                                <iframe src="https://1drv.ms/w/c/6132419a28776d5d/IQT90dR_lMk4SqkoYxeguNYBAZV99i3tpyZyv0cJiqdWgQ8" width="476" height="288" frameborder="0" scrolling="no"></iframe>
+                            </div>
+                            <h1 class="text-3xl font-bold text-center mb-3 text-secondary">Grafikom Homework 1</h1>
+                            <h3 class="text-xl font-semibold text-center mb-3 text-white">Tokoh Perintis Grafika Komputer</h3>
+                            <p class="text-white/80 text-center text-sm md:text-base">
+                                Presentasi dan Penjelasan tentang tokoh-tokoh perintis dalam bidang grafika komputer.
+                            </p>
+                        </div>
+                        
+                        <!-- Project 2 -->
+                        <div class="skill-card bg-white/10 backdrop-blur-md rounded-2xl p-6 border-2 border-primary/20 hover:border-primary transition-all duration-300 hover:scale-[1.02] group">
+                            <div class="video-container mb-4 relative pb-[56.25%] h-0 overflow-hidden rounded-lg">
+                                <iframe src="https://1drv.ms/w/c/6132419a28776d5d/IQTDT67n5qEySq0n7_YnUT9xAeGN1plNGE9KAudb89Zm5rM" width="476" height="288" frameborder="0" scrolling="no"></iframe>
+                            </div>
+                            <div class="video-container mb-4 relative pb-[56.25%] h-0 overflow-hidden rounded-lg">
+                                <iframe 
+                                    class="absolute top-0 left-0 w-full h-full"
+                                    src="https://drive.google.com/file/d/1OqcnJ3aA8Z7sgwlKcWxNtd2brULrjw71/preview" 
+                                    frameborder="0"
+                                    allowfullscreen>
+                                </iframe>
+                            </div>
+                            <h1 class="text-3xl font-bold text-center mb-3 text-secondary">Grafikom Homework 2</h1>
+                            <h3 class="text-xl font-bold text-center mb-3 text-white">Algoritma Pembentukan Garis</h3>
+                            <p class="text-white/80 text-center text-sm md:text-base">
+                                Penjelasan tentang algoritma pembentukan grais dalam bidang grafika komputer.
+                            </p>
+                        </div>
+                        
+                        <!-- Project 3 -->
+                        <div class="skill-card bg-white/10 backdrop-blur-md rounded-2xl p-6 border-2 border-primary/20 hover:border-primary transition-all duration-300 hover:scale-[1.02] group">
+                            <div class="video-container mb-4 relative pb-[56.25%] h-0 overflow-hidden rounded-lg">
+                                <iframe src="https://1drv.ms/w/c/6132419a28776d5d/IQR3qQad5l6SS5ICVPaukOjhAXp0h49Dh4NKIDfP5QREw-A" width="476" height="288" frameborder="0" scrolling="no"></iframe>
+                            </div>
+                            <h1 class="text-3xl font-bold text-center mb-3 text-secondary">Grafikom Homework 3</h1>
+                            <h3 class="text-xl font-bold text-center mb-3 text-white">Algoritma Pembentukan Lingkaran</h3>
+                            <p class="text-white/80 text-center text-sm md:text-base">
+                                Penjelasan tentang algoritma pembentukan lingkaran dalam bidang grafika komputer.
+                            </p>
+                        </div>
+
+                        <!-- Project 4 -->
+                        <div class="skill-card bg-white/10 backdrop-blur-md rounded-2xl p-6 border-2 border-primary/20 hover:border-primary transition-all duration-300 hover:scale-[1.02] group">
+                            <div class="video-container mb-4 relative pb-[56.25%] h-0 overflow-hidden rounded-lg">
+                                <iframe src="https://1drv.ms/w/c/6132419a28776d5d/IQT2zzxbDVNPSrr6tJ2R3sHPAbn1VxUZ4nhGwKaFvZJOqIA" width="476" height="288" frameborder="0" scrolling="no"></iframe>
+                            </div>
+                            <h1 class="text-3xl font-bold text-center mb-3 text-secondary">Grafikom Homework 4</h1>
+                            <h3 class="text-xl font-bold text-center mb-3 text-white">Algoritma Pembentukan Kurva</h3>
+                            <p class="text-white/80 text-center text-sm md:text-base">
+                                Penjelasan tentang algoritma pembentukan kurva dalam bidang grafika komputer.
+                            </p>
+                        </div>
+
+                        <!-- Project 5 -->
+                        <div class="skill-card bg-white/10 backdrop-blur-md rounded-2xl p-6 border-2 border-primary/20 hover:border-primary transition-all duration-300 hover:scale-[1.02] group">
+                            <div class="video-container mb-4 relative pb-[56.25%] h-0 overflow-hidden rounded-lg">
+                                <iframe 
+                                    class="absolute top-0 left-0 w-full h-full"
+                                    src="https://www.youtube.com/embed/0-nYMoj0GzI"
+                                    frameborder="0"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                    allowfullscreen>
+                                </iframe>
+                            </div>
+                            <h1 class="text-3xl font-bold text-center mb-3 text-secondary">Grafikom Quiz 1</h1>
+                            <h3 class="text-xl font-bold text-center mb-3 text-primary">Penggambaran Grafik 2D</h3>
+                            <p class="text-white/80 text-center text-sm md:text-base">
+                                Video penjelasan tentang menggambarkan grafik 2D dalam grafika komputer.
+                            </p>
+                        </div>
+                        
+                        <!-- Project 6 -->
+                        <div class="skill-card bg-white/10 backdrop-blur-md rounded-2xl p-6 border-2 border-primary/20 hover:border-primary transition-all duration-300 hover:scale-[1.02] group">
+                            <div class="video-container mb-4 relative pb-[56.25%] h-0 overflow-hidden rounded-lg">
+                                <iframe 
+                                    class="absolute top-0 left-0 w-full h-full"
+                                    src="https://www.youtube.com/embed/XzKqGMWFYfw?autoplay=0&rel=0"
+                                    frameborder="0"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                    allowfullscreen>
+                                </iframe>
+                            </div>
+                            <h1 class="text-3xl font-bold text-center mb-3 text-secondary">Grafikom Quiz 2</h1>
+                            <h3 class="text-xl font-bold text-center mb-3 text-primary">Transformasi 2D</h3>
+                            <p class="text-white/80 text-center text-sm md:text-base">
+                                Video penjelasan tentang transformasi 2D dalam grafika komputer.
+                            </p>
+                        </div>
+
+                        <!-- Project 7 -->
+                        <div class="skill-card bg-white/10 backdrop-blur-md rounded-2xl p-6 border-2 border-primary/20 hover:border-primary transition-all duration-300 hover:scale-[1.02] group">
+                            <div class="video-container mb-4 relative pb-[56.25%] h-0 overflow-hidden rounded-lg">
+                                <iframe 
+                                    class="absolute top-0 left-0 w-full h-full"
+                                    src="https://www.youtube.com/embed/S9R-I1fJ7dc"
+                                    frameborder="0"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                    allowfullscreen>
+                                </iframe>
+                            </div>
+                            <h1 class="text-3xl font-bold text-center mb-3 text-secondary">Grafikom Quiz 3</h1>
+                            <h3 class="text-xl font-bold text-center mb-3 text-primary">Line Clipping Algorithm</h3>
+                            <p class="text-white/80 text-center text-sm md:text-base">
+                                Video penjelasan tentang algoritma pemotongan garis dalam grafika komputer.
+                            </p>
+                        </div>
+
+                        <!-- Project 8 -->
+                        <div class="skill-card bg-white/10 backdrop-blur-md rounded-2xl p-6 border-2 border-primary/20 hover:border-primary transition-all duration-300 hover:scale-[1.02] group">
+                            <div class="video-container mb-4 relative pb-[56.25%] h-0 overflow-hidden rounded-lg">
+                                <iframe 
+                                    class="absolute top-0 left-0 w-full h-full"
+                                    src="https://www.youtube.com/embed/sywupXOZ60A"
+                                    frameborder="0"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                    allowfullscreen>
+                                </iframe>
+                            </div>
+                            <h1 class="text-3xl font-bold text-center mb-3 text-secondary">Grafikom Quiz 4</h1>
+                            <h3 class="text-xl font-bold text-center mb-3 text-primary">Polygon Clipping Algorithm</h3>
+                            <p class="text-white/80 text-center text-sm md:text-base">
+                                Video penjelasan tentang algoritma pemotongan polygon dalam grafika komputer.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer Website -->
+        <footer class="footer w-full py-8 md:py-10 bg-gray-900">
+            <div class="social text-center pb-4 md:pb-6 text-white">
+                <a href="https://www.linkedin.com/in/m-abdul-adhim-255698158/" 
+                class="w-8 h-8 md:w-10 md:h-10 inline-flex items-center justify-center rounded-full mx-1 md:mx-2 transition-all duration-300 ease-in-out hover:scale-110 hover:-translate-y-2 hover:bg-primary hover:text-secondary relative overflow-hidden">
+                <lord-icon
+                    src="https://cdn.lordicon.com/fgctxlnd.json"
+                    trigger="hover"
+                    state="hover-draw"
+                    colors="primary:#ffffff,secondary:#b4b4b4"
+                    style="width:60%;height:60%;position:absolute">
+                </lord-icon>
+                </a>
+                
+                <a href="https://github.com/adq1p89" 
+                class="w-8 h-8 md:w-10 md:h-10 inline-flex items-center justify-center rounded-full mx-1 md:mx-2 transition-all duration-300 ease-in-out hover:scale-110 hover:-translate-y-2 hover:bg-primary hover:text-secondary relative overflow-hidden">
+                <lord-icon
+                    src="https://cdn.lordicon.com/ioihllwu.json"
+                    trigger="hover"
+                    colors="primary:#082c41,secondary:#ffffff"
+                    style="width:80%;height:80%;position:absolute">
+                </lord-icon>
+                </a>
+                
+                <a href="https://www.instagram.com/ad_himz/" 
+                class="w-8 h-8 md:w-10 md:h-10 inline-flex items-center justify-center rounded-full mx-1 md:mx-2 transition-all duration-300 ease-in-out hover:scale-110 hover:-translate-y-2 hover:bg-primary hover:text-secondary relative overflow-hidden">
+                <lord-icon
+                    src="https://cdn.lordicon.com/wgtaryar.json"
+                    trigger="morph"
+                    colors="primary:#ffffff,secondary:#ffbf9b,tertiary:#ffffff,quaternary:#ffbf9b"
+                    style="width:70%;height:70%;position:absolute">
+                </lord-icon>
+                </a>
+            </div>
+
+            <ul class="list m-0 p-0 text-base md:text-lg leading-normal text-center mb-0">
+                <li class="inline-block px-2 md:px-4"><a href="Homepage.html" class="text-white">Home</a></li>
+                <li class="inline-block px-2 md:px-4"><a href="AboutMe.html" class="text-white">About Me</a></li>
+                <li class="inline-block px-2 md:px-4"><a href="Services.html" class="text-white">Services</a></li>
+                <li class="inline-block px-2 md:px-4"><a href="Projects.html" class="text-white">Projects</a></li>
+                <li class="inline-block px-2 md:px-4"><a href="Contacts.html" class="text-white">Contact</a></li>
+            </ul>
+            <p class="copyright mt-8 md:mt-12 text-center text-sm md:text-base text-white pb-4">
+                2025&nbsp;&nbsp;&nbsp;© Ad_himZ&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;All Rights Reserved
+            </p>
+        </footer>
+    </div>
+
+    <script>
+        // Vue.js App
+        const { createApp } = Vue;
+        
+        createApp({
+            mounted() {
+                // Initialize Lenis for smooth scrolling
+                const lenis = new Lenis({
+                    lerp: 0.1,
+                    smooth: true,
+                });
+                
+                function raf(time) {
+                    lenis.raf(time);
+                    requestAnimationFrame(raf);
+                }
+                
+                requestAnimationFrame(raf);
+                
+                // Mobile menu toggle
+                const btnBar = document.querySelector('.btn_bar');
+                const btnBarIcon = document.querySelector('.btn_bar i');
+                const dropDownMenu = document.querySelector('.dropdown_menu');
+                
+                btnBar.onclick = function() {
+                    dropDownMenu.classList.toggle('h-[210px]');
+                    dropDownMenu.classList.toggle('hidden');
+                    
+                    const isOpen = dropDownMenu.classList.contains('h-[210px]');
+                    btnBarIcon.classList = isOpen 
+                        ? 'fa-solid fa-xmark' 
+                        : 'fa-solid fa-bars';
+                }
+            }
+        }).mount('#app');
+
+        // Initialize Swiper
+                const swiper = new Swiper('.swiper-container', {
+                    // Required parameters
+                    direction: 'horizontal',
+                    slidesPerView: 1,
+                    spaceBetween: 0,
+                    centeredSlides: true,
+                    
+                    // Optional parameters
+                    loop: true,
+                    autoplay: {
+                        delay: 5000,
+                        disableOnInteraction: false,
+                    },
+                    effect: 'fade',
+                    fadeEffect: {
+                        crossFade: true
+                    },
+                    
+                    // If we need pagination
+                    pagination: {
+                        el: '.swiper-pagination',
+                        clickable: true,
+                    },
+                    
+                    // Navigation arrows
+                    navigation: {
+                        nextEl: '.swiper-button-next',
+                        prevEl: '.swiper-button-prev',
+                    },
+                });
+    </script>
+</body>
+</html>
