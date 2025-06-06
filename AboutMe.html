@@ -19,8 +19,7 @@
                         secondary: '#082c41',
                     },
                     animation: {
-                        'typing': 'typing 3.5s steps(40, end)',
-                        'blink-caret': 'blink-caret 0.75s step-end infinite',
+                        'glowing-text': 'glowing-text 4s linear infinite',
                         'orbiting-shadow': 'orbiting-shadow 4s linear infinite',
                     },
                     keyframes: {
@@ -38,6 +37,13 @@
                             '50%': { 'box-shadow': '-15px 0 20px -5px rgba(255, 255, 255, 0.7)' },
                             '75%': { 'box-shadow': '0 -15px 20px -5px rgba(255, 255, 255, 0.7)' },
                             '100%': { 'box-shadow': '15px 0 20px -5px rgba(255, 255, 255, 0.7)' }
+                        },
+                        'glowing-text': { // Keyframes untuk animasi glowing
+                            '20%': { 'text-shadow': '5px 0px 15px #FFBF9B' },
+                            '35%': { 'text-shadow': '0px 5px 15px #FFBF9B' },
+                            '50%': { 'text-shadow': '-5px 0px 15px #FFBF9B' },
+                            '35%': { 'text-shadow': '0px -5px 15px #FFBF9B' },
+                            '20%': { 'text-shadow': '5px 0px 15px #FFBF9B' }
                         }
                     }
                 }
@@ -145,13 +151,9 @@
             }
             
             h3 {
-                font-size: 1.5rem;
+                font-size: 1.8rem;
             }
             
-            .btn, .btn_contact {
-                padding: 0.75rem 1.5rem;
-                font-size: 0.9rem;
-            }
             
             .social_media_icon a {
                 width: 2.5rem;
@@ -159,27 +161,6 @@
                 margin-right: 1rem;
             }
             
-            .LWT_desain {
-                font-size: 1.5rem;
-            }
-        }
-
-        @keyframes orbiting-shadow {
-            0% {
-                box-shadow: 15px 0 20px -5px rgba(255, 255, 255, 0.7);
-            }
-            25% {
-                box-shadow: 0 15px 20px -5px rgba(255, 255, 255, 0.7);
-            }
-            50% {
-                box-shadow: -15px 0 20px -5px rgba(255, 255, 255, 0.7);
-            }
-            75% {
-                box-shadow: 0 -15px 20px -5px rgba(255, 255, 255, 0.7);
-            }
-            100% {
-                box-shadow: 15px 0 20px -5px rgba(255, 255, 255, 0.7);
-            }
         }
         
         .homepage {
@@ -310,7 +291,7 @@
         .timeline_dot {
             height: 20px;
             width: 20px;
-            background-color: #082c41;
+            background-color: #FFBF9B;
             box-shadow: 0 0 25px #082c41,
                         0 0 50px #082c41;
             position: absolute;
@@ -322,8 +303,9 @@
         .timeline_date {
             font-size: 20px;
             font-weight: 800;
-            color: #082c41;
+            color: #FFBF9B;
             margin: 6px 0 15px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
         }
 
         .timeline_content {
@@ -367,13 +349,60 @@
             background-color: #FFBF9B;
             width: 50px;
         }
+
+        /* Custom Dot Cursor Styles */
+        .custom-dot-cursor {
+            position: fixed;
+            left: 0; /* Initial position, will be updated by JS */
+            top: 0;  /* Initial position, will be updated by JS */
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            /* transform: translate(-50%, -50%); Dihapus karena kita akan set transform via JS */
+            transition: width 0.2s ease, height 0.2s ease, background-color 0.2s ease; /* Untuk efek hover */
+        }
+        .custom-dot-cursor.hovered { /* Jika ingin ada efek hover pada cursor */
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Animasi In/Out Styles */
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(25px);
+            transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+        }
+        .animate-on-scroll.in-view {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Pastikan body tidak ada overflow-x jika animasi menyebabkan sedikit pergeseran */
+        body {
+            overflow-x: hidden;
+        }
+
+        /* Ganti CSS untuk animasi text-slide dengan ini */
+        .scrolling-text-container {
+            position: relative;
+            display: inline-block;
+            height: 2.5rem;
+            overflow: hidden;
+            vertical-align: top;
+        }
     </style>
 </head>
 
 <body class="font-montserrat bg-black bg-[url('https://images.unsplash.com/photo-1605600389423-2d67e7f877ab?q=80&w=1771&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')] bg-cover bg-center min-h-screen">
+    
+    <!-- Custom Dot Cursor Element -->
+    <div class="custom-dot-cursor"></div>
+
     <div id="app">
         <!-- Header + NavBar -->
-        <header class="relative px-4 sm:px-8">
+        <header class="relative px-4 sm:px-8 animate-on-scroll z-50">
             <div class="navbar max-w-6xl h-16 pt-6 mx-auto flex items-center justify-between">
                 <div class="navbar_logo cursor-pointer transition-all duration-300 ease-in-out hover:scale-110">
                     <a href="#">
@@ -385,9 +414,7 @@
                 <ul class="navbar_menu hidden md:flex gap-4 lg:gap-8">
                     <li><a href="index.html" class="text-white text-sm lg:text-base font-semibold hover:text-primary active:text-primary">Home</a></li>
                     <li><a href="AboutMe.html" class="text-white text-sm lg:text-base font-semibold hover:text-primary active:text-primary">About Me</a></li>
-                    <li><a href="Services.html" class="text-white text-sm lg:text-base font-semibold hover:text-primary active:text-primary">Services</a></li>
                     <li><a href="Projects.html" class="text-white text-sm lg:text-base font-semibold hover:text-primary active:text-primary">Projects</a></li>
-                    <li><a href="Contacts.html" class="text-white text-sm lg:text-base font-semibold hover:text-primary active:text-primary">Contact</a></li>
                 </ul>
 
                 <div class="btn_bar md:hidden text-white text-2xl cursor-pointer">
@@ -398,20 +425,19 @@
             <div class="dropdown_menu hidden absolute right-4 sm:right-8 top-16 w-64 sm:w-72 bg-white/10 backdrop-blur-lg rounded-xl overflow-hidden transition-all duration-200 ease-[cubic-bezier(0.175,0.885,0.32,1.275)] h-0">
                 <li class="py-3 flex items-center justify-center"><a href="index.html" class="text-white text-base font-semibold hover:text-primary">Home</a></li>
                 <li class="py-3 flex items-center justify-center"><a href="AboutMe.html" class="text-white text-base font-semibold hover:text-primary">About Me</a></li>
-                <li class="py-3 flex items-center justify-center"><a href="Services.html" class="text-white text-base font-semibold hover:text-primary">Services</a></li>
                 <li class="py-3 flex items-center justify-center"><a href="Projects.html" class="text-white text-base font-semibold hover:text-primary">Projects</a></li>
-                <li class="py-3 flex items-center justify-center"><a href="Contacts.html" class="text-white text-base font-semibold hover:text-primary">Contact</a></li>
+
             </div>
         </header>
 
         <!-- Pengenalan -->
         <section class="homepage px-[5%] sm:px-[9.2%] py-4 flex flex-col md:flex-row items-center justify-center md:gap-20 lg:gap-40">
-            <div class="isi_home flex flex-col items-center md:items-start text-center md:text-left justify-center mt-8 md:mt-12">
-                <h1 class="text-white text-3xl md:text-4xl font-bold mb-8 leading-none">About Me <span class="text-primary text-3xl md:text-4xl lg:text-5xl gap-2">[Abdul Adhim]</span></h1>
+            <div class="isi_home flex flex-col items-center md:items-start text-center md:text-left justify-center mt-8 md:mt-12 animate-on-scroll">
+                <h1 class="text-white text-3xl md:text-4xl font-bold mb-8 leading-none animate-on-scroll">About Me <span class="text-primary text-3xl md:text-4xl lg:text-5xl gap-2 animate-glowing-text">[Abdul Adhim]</span></h1>
                 <!-- <h3 class="text-white text-xl md:text-2xl lg:text-3xl font-semibold mb-6 mt-4 flex items-center justify-center gap-2">
                     About Me
                 </h3> -->
-                <p class="text-white text-sm md:text-base font-medium leading-snug max-w-[800px] lg:max-w-[1000px]">
+                <p class="text-white text-sm md:text-base font-medium leading-snug max-w-[800px] lg:max-w-[1000px] animate-on-scroll">
                     Hello, my name is M. Abdul Adhim, mostly called Abdul or Adhim.
                     My interest is in graphic design, be it images, photos, or videos.
                     But it does not rule out the possibility that I am also interested in the world of programming. 
@@ -420,14 +446,14 @@
                     For more information, you can check my CV below. 
                 </p>
                 
-                <div class="btn_group flex flex-col sm:flex-row items-center gap-4 md:gap-8 mt-8 md:mt-12">
+                <div class="btn_group flex flex-col sm:flex-row items-center gap-4 md:gap-8 mt-8 md:mt-12 animate-on-scroll">
                     <a href="https://drive.google.com/file/d/123FoL2rgPUpOncs2NXOoeNC9t9b3L5Ku/view?usp=drive_link" class="btn inline-block px-8 py-3 md:px-11 md:py-4 bg-primary rounded-full text-sm md:text-base text-white border-2 border-primary tracking-wider font-bold transition-all duration-300 ease-in-out hover:scale-105 hover:font-extrabold hover:shadow-lg hover:shadow-secondary hover:bg-primary hover:text-secondary hover:border-secondary">
                         My Curriculum Vitae
                     </a>
                 </div>
             </div>
 
-            <div class="home_img rounded-full mt-8 md:mt-0">
+            <div class="home_img rounded-full mt-8 md:mt-0 animate-on-scroll">
                 <img src="IMG_20240310_235244.jpg" 
                     alt="Photo Profil" 
                     class="w-56 md:w-[28vw] max-w-sm rounded-full cursor-pointer 
@@ -437,15 +463,15 @@
         </section>
 
         <!-- Education Timeline Section -->
-        <section class="pendidikan py-20 bg-white">
+        <section class="pendidikan py-20 bg-transparant animate-on-scroll">
             <div class="container mx-auto px-4">
-                <h2 class="heading_education text-4xl md:text-5xl font-extrabold text-center mb-16 text-secondary">My Education</h2>
+                <h2 class="heading_education text-4xl md:text-5xl font-extrabold text-center mb-16 text-primary animate-on-scroll">My Education</h2>
                 
                 <div class="timeline_items max-w-6xl mx-auto">
                     <!-- Timeline item 1 -->
-                    <div class="timeline_item">
+                    <div class="timeline_item animate-on-scroll">
                         <div class="timeline_dot"></div>
-                        <div class="timeline_date text-secondary">July 2016 - Mei 2019</div>
+                        <div class="timeline_date text-primary">July 2016 - Mei 2019</div>
                         <div class="timeline_content">
                             <h3 class="text-primary">Junior High School</h3>
                             <p class="text-primary">School at SMP Gula Putih Mataram majoring
@@ -455,9 +481,9 @@
                     </div>
                     
                     <!-- Timeline item 2 -->
-                    <div class="timeline_item">
+                    <div class="timeline_item animate-on-scroll">
                         <div class="timeline_dot"></div>
-                        <div class="timeline_date text-secondary">June 2019 - May 2022</div>
+                        <div class="timeline_date text-primary">June 2019 - May 2022</div>
                         <div class="timeline_content">
                             <h3 class="text-primary">High School</h3>
                             <p class="text-primary">School at SMAS Sugar Group B Mataram majoring
@@ -467,9 +493,9 @@
                     </div>
                     
                     <!-- Timeline item 3 -->
-                    <div class="timeline_item">
+                    <div class="timeline_item animate-on-scroll">
                         <div class="timeline_dot"></div>
-                        <div class="timeline_date text-secondary">August 2022 - Until Now</div>
+                        <div class="timeline_date text-priumary">August 2022 - Until Now</div>
                         <div class="timeline_content">
                             <h3 class="text-primary">Undergraduate</h3>
                             <p class="text-primary">Continued my undergraduate degree at Lampung University majoring in Computer Science.</p>
@@ -480,15 +506,15 @@
         </section>
 
         <!-- Career Timeline Section -->
-        <section class="pendidikan py-20 bg-white">
+        <section class="pendidikan py-20 bg-transparant animate-on-scroll">
             <div class="container mx-auto px-4">
-                <h2 class="heading_education text-4xl md:text-5xl font-extrabold text-center mb-16 text-secondary">My Career</h2>
+                <h2 class="heading_education text-4xl md:text-5xl font-extrabold text-center mb-16 text-primary animate-on-scroll">My Career</h2>
                 
                 <div class="timeline_items max-w-6xl mx-auto">
                     <!-- Timeline item 1 -->
-                    <div class="timeline_item">
+                    <div class="timeline_item animate-on-scroll">
                         <div class="timeline_dot"></div>
-                        <div class="timeline_date text-secondary">June 2019 - May 2022</div>
+                        <div class="timeline_date text-primary">June 2019 - May 2022</div>
                         <div class="timeline_content">
                             <h3 class="text-primary">Internship</h3>
                             <p class="text-primary">I once interned at a photocopy shop, where I was an
@@ -498,9 +524,9 @@
                     </div>
                     
                     <!-- Timeline item 2 -->
-                    <div class="timeline_item">
+                    <div class="timeline_item animate-on-scroll">
                         <div class="timeline_dot"></div>
-                        <div class="timeline_date text-secondary">October 2024 - January 2025</div>
+                        <div class="timeline_date text-primary">October 2024 - January 2025</div>
                         <div class="timeline_content">
                             <h3 class="text-primary">Independent Internship</h3>
                             <p class="text-primary">Certified independent internship organised by UPA TIK (Information and Communication Technology Academic Service Unit) of Lampung University in collaboration with PT. Telkom Indonesia and PT. Gasnet. Focused on the UI/UX design of the information system that was being developed at the time, including websites and mobile applications.</p>
@@ -511,49 +537,57 @@
         </section>
 
         <!-- Footer Website -->
-        <footer class="footer relative w-full py-8 md:py-10 bg-secondary">
+        <footer class="footer relative w-full py-8 md:py-10 bg-secondary animate-on-scroll">
             <div class="social text-center pb-4 md:pb-6 text-white">
                 <a href="https://www.linkedin.com/in/m-abdul-adhim-255698158/" 
-                class="w-8 h-8 md:w-10 md:h-10 inline-flex items-center justify-center rounded-full mx-1 md:mx-2 transition-all duration-300 ease-in-out hover:scale-110 hover:-translate-y-2 hover:bg-primary hover:text-secondary relative overflow-hidden">
+                class="w-8 h-8 md:w-10 md:h-10 inline-flex items-center justify-center rounded-full mx-1 md:mx-2 transition-all duration-300 ease-in-out hover:scale-110 hover:-translate-y-2 hover:bg-primary hover:text-secondary relative overflow-hidden animate-on-scroll">
                 <lord-icon
                     src="https://cdn.lordicon.com/fgctxlnd.json"
                     trigger="hover"
                     state="hover-draw"
                     colors="primary:#ffffff,secondary:#b4b4b4"
-                    style="width:60%;height:60%;position:absolute">
+                    style="width:60%;height:60%">
                 </lord-icon>
                 </a>
                 
                 <a href="https://github.com/adq1p89" 
-                class="w-8 h-8 md:w-10 md:h-10 inline-flex items-center justify-center rounded-full mx-1 md:mx-2 transition-all duration-300 ease-in-out hover:scale-110 hover:-translate-y-2 hover:bg-primary hover:text-secondary relative overflow-hidden">
+                class="w-8 h-8 md:w-10 md:h-10 inline-flex items-center justify-center rounded-full mx-1 md:mx-2 transition-all duration-300 ease-in-out hover:scale-110 hover:-translate-y-2 hover:bg-primary hover:text-secondary relative overflow-hidden animate-on-scroll">
                 <lord-icon
                     src="https://cdn.lordicon.com/ioihllwu.json"
                     trigger="hover"
                     colors="primary:#082c41,secondary:#ffffff"
-                    style="width:80%;height:80%;position:absolute">
+                    style="width:80%;height:80%">
                 </lord-icon>
                 </a>
                 
                 <a href="https://www.instagram.com/ad_himz/" 
-                class="w-8 h-8 md:w-10 md:h-10 inline-flex items-center justify-center rounded-full mx-1 md:mx-2 transition-all duration-300 ease-in-out hover:scale-110 hover:-translate-y-2 hover:bg-primary hover:text-secondary relative overflow-hidden">
+                class="w-8 h-8 md:w-10 md:h-10 inline-flex items-center justify-center rounded-full mx-1 md:mx-2 transition-all duration-300 ease-in-out hover:scale-110 hover:-translate-y-2 hover:bg-primary hover:text-secondary relative overflow-hidden animate-on-scroll">
                 <lord-icon
                     src="https://cdn.lordicon.com/wgtaryar.json"
                     trigger="morph"
-                    colors="primary:#ffffff,secondary:#ffbf9b,tertiary:#ffffff,quaternary:#ffbf9b"
-                    style="width:70%;height:70%;position:absolute">
+                    colors="primary:#ffffff,secondary:#082c41,tertiary:#ffffff,quaternary:#082c41"
+                    style="width:70%;height:70%">
+                </lord-icon>
+                </a>
+
+                <a href="https://youtube.com/@abdularfwm?si=H47RCo5JLUujl1hK" 
+                class="w-8 h-8 md:w-10 md:h-10 inline-flex items-center justify-center rounded-full mx-1 md:mx-2 transition-all duration-300 ease-in-out hover:scale-110 hover:-translate-y-2 hover:bg-primary hover:text-secondary relative overflow-hidden animate-on-scroll">
+                <lord-icon
+                    src="https://cdn.lordicon.com/dbcganmh.json"
+                    trigger="morph"
+                    colors="primary:#082c41,secondary:#ffffff,tertiary:#ffffff"
+                    style="width:70%;height:70%">
                 </lord-icon>
                 </a>
             </div>
 
             <ul class="list m-0 p-0 text-base md:text-lg leading-normal text-center mb-0">
-                <li class="inline-block px-2 md:px-4"><a href="index.html" class="text-white">Home</a></li>
-                <li class="inline-block px-2 md:px-4"><a href="About Me.html" class="text-white">About Me</a></li>
-                <li class="inline-block px-2 md:px-4"><a href="Services.html" class="text-white">Services</a></li>
-                <li class="inline-block px-2 md:px-4"><a href="Projects.html" class="text-white">Projects</a></li>
-                <li class="inline-block px-2 md:px-4"><a href="Contacts.html" class="text-white">Contact</a></li>
+                <li class="inline-block px-2 md:px-4"><a href="index.html" class="text-white animate-on-scroll">Home</a></li>
+                <li class="inline-block px-2 md:px-4"><a href="About Me.html" class="text-white animate-on-scroll">About Me</a></li>
+                <li class="inline-block px-2 md:px-4"><a href="Projects.html" class="text-white animate-on-scroll">Projects</a></li>
             </ul>
-            <p class="copyright mt-8 md:mt-12 text-center text-sm md:text-base text-white pb-4">
-                2025&nbsp;&nbsp;&nbsp;© Ad_himZ&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;All Rights Reserved
+            <p class="copyright mt-8 md:mt-12 text-center text-sm md:text-base text-white pb-4 animate-on-scroll">
+                © 2025 Ad_himZ&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;All Rights Reserved
             </p>
         </footer>
     </div>
@@ -583,8 +617,19 @@
                 const dropDownMenu = document.querySelector('.dropdown_menu');
                 
                 btnBar.onclick = function() {
-                    dropDownMenu.classList.toggle('h-[210px]');
-                    dropDownMenu.classList.toggle('hidden');
+                    if (dropDownMenu.classList.contains('h-0')) {
+                        dropDownMenu.classList.remove('h-0');
+                        dropDownMenu.classList.add('h-[210px]'); // Sesuaikan height jika perlu
+                        dropDownMenu.classList.remove('hidden');
+                    } else {
+                        dropDownMenu.classList.add('h-0');
+                        dropDownMenu.classList.remove('h-[210px]');
+                        // Tambahkan event listener untuk 'transitionend' agar 'hidden' ditambahkan setelah transisi selesai
+                        dropDownMenu.addEventListener('transitionend', function handler() {
+                            dropDownMenu.classList.add('hidden');
+                            dropDownMenu.removeEventListener('transitionend', handler);
+                        });
+                    }
                     
                     const isOpen = dropDownMenu.classList.contains('h-[210px]');
                     btnBarIcon.classList = isOpen 
@@ -594,45 +639,109 @@
             }
         }).mount('#app');
 
-        const words = ["Graphic Designer", "Web Designer", "UI/UX Designer"];
-        let wordIndex = 0;
-        let charIndex = 0;
-        let isDeleting = false;
-        let isEnd = false;
-        const typingSpeed = 150;
-        const deletingSpeed = 50;
-        const delayBetweenWords = 2000;
-
-        const typingText = document.getElementById('typingText');
-
-        function type() {
-        const currentWord = words[wordIndex];
-        const currentChar = currentWord.substring(0, charIndex);
-        
-        typingText.textContent = currentChar;
-        typingText.classList.add('animate-typing');
-        typingText.classList.add('animate-blink-caret');
-        
-        if (!isDeleting && charIndex < currentWord.length) {
-            // Mengetik
-            charIndex++;
-            setTimeout(type, typingSpeed);
-        } else if (isDeleting && charIndex > 0) {
-            // Menghapus
-            charIndex--;
-            setTimeout(type, deletingSpeed);
-        } else {
-            // Ganti kata
-            isDeleting = !isDeleting;
-            if (!isDeleting) {
-            wordIndex = (wordIndex + 1) % words.length;
-            }
-            setTimeout(type, delayBetweenWords);
-        }
-        }
-
         document.addEventListener("DOMContentLoaded", () => {
-        type();
+            const btnBar = document.querySelector('.btn_bar');
+            const btnBarIcon = document.querySelector('.btn_bar i');
+            const dropDownMenu = document.querySelector('.dropdown_menu');
+            
+            btnBar.onclick = function() {
+                const isOpen = dropDownMenu.classList.toggle('h-[150px]');
+                dropDownMenu.classList.toggle('h-0');
+                dropDownMenu.classList.toggle('hidden', !isOpen);
+                btnBarIcon.className = isOpen ? 'fa-solid fa-xmark' : 'fa-solid fa-bars';
+            }
+
+            // Custom Cursor Logic
+            const dotCursorEl = document.querySelector('.custom-dot-cursor');
+            if(dotCursorEl) {
+                let mouseX = 0, mouseY = 0, cursorX = 0, cursorY = 0;
+                const delay = 0.12;
+                // Define your primary and secondary colors here
+                const primaryColor = '#FFBF9B';
+                const secondaryColor = '#082c41';
+
+                /**
+                 * Helper function to get the background color of an element,
+                 * traversing up the DOM if the element's background is transparent.
+                 */
+                function getBackgroundColor(element) {
+                    let currentElement = element;
+                    while (currentElement) {
+                        const color = window.getComputedStyle(currentElement).backgroundColor;
+                        if (color && color !== 'rgba(0, 0, 0, 0)' && color !== 'transparent') {
+                            return color;
+                        }
+                        currentElement = currentElement.parentElement;
+                    }
+                    return 'rgb(0, 0, 0)'; // Default to black if no color is found
+                }
+
+                /**
+                 * Helper function to calculate the luminance of an RGB color.
+                 * This helps determine if a color is "light" or "dark".
+                 */
+                function getLuminance(bgColor) {
+                    // Extract R, G, B values from 'rgb(r, g, b)' string
+                    const rgb = bgColor.match(/\d+/g);
+                    if (!rgb) return 0;
+                    
+                    const r = parseInt(rgb[0]);
+                    const g = parseInt(rgb[1]);
+                    const b = parseInt(rgb[2]);
+
+                    // Formula for perceived brightness
+                    return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+                }
+                
+                document.addEventListener('mousemove', (e) => {
+                    mouseX = e.clientX;
+                    mouseY = e.clientY;
+
+                    // Hide original cursor so only custom one is visible
+                    // And get the element under the mouse
+                    const elementUnderCursor = document.elementFromPoint(mouseX, mouseY);
+                    if (elementUnderCursor) {
+                        
+                        // Get its computed background color
+                        const bgColor = getBackgroundColor(elementUnderCursor);
+                        
+                        // Calculate luminance
+                        const luminance = getLuminance(bgColor);
+                        
+                        // Set cursor color based on luminance
+                        // A threshold of 140 is a good starting point
+                        if (luminance > 140) {
+                            // Background is LIGHT, so cursor should be DARK (secondary)
+                            dotCursorEl.style.backgroundColor = secondaryColor;
+                        } else {
+                            // Background is DARK, so cursor should be LIGHT (primary)
+                            dotCursorEl.style.backgroundColor = primaryColor;
+                        }
+                    }
+                });
+
+                function updateDotCursor() {
+                    cursorX += (mouseX - cursorX) * delay;
+                    cursorY += (mouseY - cursorY) * delay;
+                    dotCursorEl.style.transform = `translate3d(${cursorX - (dotCursorEl.offsetWidth / 2)}px, ${cursorY - (dotCursorEl.offsetHeight / 2)}px, 0)`;
+                    requestAnimationFrame(updateDotCursor);
+                }
+                requestAnimationFrame(updateDotCursor);
+                
+                document.querySelectorAll('a, button, [onclick], .skill-card, .home_img img').forEach(el => {
+                    el.addEventListener('mouseenter', () => dotCursorEl.classList.add('hovered'));
+                    el.addEventListener('mouseleave', () => dotCursorEl.classList.remove('hovered'));
+                });
+            }
+
+            // Intersection Observer for scroll animations
+            const animatedElements = document.querySelectorAll('.animate-on-scroll');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    entry.target.classList.toggle('in-view', entry.isIntersecting);
+                });
+            }, { threshold: 0.2 });
+            animatedElements.forEach(el => observer.observe(el));
         });
     </script>
 </body>

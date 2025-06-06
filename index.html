@@ -19,25 +19,23 @@
                         secondary: '#082c41',
                     },
                     animation: {
-                        'typing': 'typing 3.5s steps(40, end)',
-                        'blink-caret': 'blink-caret 0.75s step-end infinite',
                         'orbiting-shadow': 'orbiting-shadow 4s linear infinite',
+                        'glowing-text': 'glowing-text 4s linear infinite',
                     },
                     keyframes: {
-                        'typing': {
-                            'from': { width: '0' },
-                            'to': { width: '100%' }
-                        },
-                        'blink-caret': {
-                            'from, to': { 'border-color': 'transparent' },
-                            '50%': { 'border-color': '#FFBF9B' }
-                        },
                         'orbiting-shadow': {
                             '0%': { 'box-shadow': '15px 0 20px -5px rgba(255, 255, 255, 0.7)' },
                             '25%': { 'box-shadow': '0 15px 20px -5px rgba(255, 255, 255, 0.7)' },
                             '50%': { 'box-shadow': '-15px 0 20px -5px rgba(255, 255, 255, 0.7)' },
                             '75%': { 'box-shadow': '0 -15px 20px -5px rgba(255, 255, 255, 0.7)' },
                             '100%': { 'box-shadow': '15px 0 20px -5px rgba(255, 255, 255, 0.7)' }
+                        },
+                        'glowing-text': { // Keyframes untuk animasi glowing
+                            '20%': { 'text-shadow': '5px 0px 15px #FFBF9B' },
+                            '35%': { 'text-shadow': '0px 5px 15px #FFBF9B' },
+                            '50%': { 'text-shadow': '-5px 0px 15px #FFBF9B' },
+                            '35%': { 'text-shadow': '0px -5px 15px #FFBF9B' },
+                            '20%': { 'text-shadow': '5px 0px 15px #FFBF9B' }
                         }
                     }
                 }
@@ -104,6 +102,10 @@
                 display: block;
                 padding: 0.5rem 0;
             }
+
+            .scrolling-text-container {
+                width: 20rem; /* Lebar untuk desktop */
+            }
         }
         
         @media (min-width: 769px) and (max-width: 1024px) {
@@ -150,24 +152,6 @@
                 font-size: 1.5rem;
             }
         }
-
-        @keyframes orbiting-shadow {
-            0% {
-                box-shadow: 15px 0 20px -5px rgba(255, 255, 255, 0.7);
-            }
-            25% {
-                box-shadow: 0 15px 20px -5px rgba(255, 255, 255, 0.7);
-            }
-            50% {
-                box-shadow: -15px 0 20px -5px rgba(255, 255, 255, 0.7);
-            }
-            75% {
-                box-shadow: 0 -15px 20px -5px rgba(255, 255, 255, 0.7);
-            }
-            100% {
-                box-shadow: 15px 0 20px -5px rgba(255, 255, 255, 0.7);
-            }
-        }
         
         .homepage {
             min-height: calc(100vh - 80px);
@@ -183,7 +167,6 @@
         
         .home_img img:hover {
             transform: scale(1.05);
-            box-shadow: 0 0 25px rgba(255, 255, 255, 0.5);
         }
         
         .btn_homepage2 {
@@ -272,13 +255,83 @@
             background-color: #FFBF9B;
             width: 50px;
         }
+
+        /* Custom Dot Cursor Styles */
+        .custom-dot-cursor {
+            position: fixed;
+            left: 0; /* Initial position, will be updated by JS */
+            top: 0;  /* Initial position, will be updated by JS */
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            /* transform: translate(-50%, -50%); Dihapus karena kita akan set transform via JS */
+            transition: width 0.2s ease, height 0.2s ease, background-color 0.2s ease; /* Untuk efek hover */
+        }
+        .custom-dot-cursor.hovered { /* Jika ingin ada efek hover pada cursor */
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Animasi In/Out Styles */
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(25px);
+            transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+        }
+        .animate-on-scroll.in-view {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Pastikan body tidak ada overflow-x jika animasi menyebabkan sedikit pergeseran */
+        body {
+            overflow-x: hidden;
+        }
+
+        /* Ganti CSS untuk animasi text-slide dengan ini */
+        .scrolling-text-container {
+            position: relative;
+            display: inline-block;
+            height: 2.5rem;
+            overflow: hidden;
+            vertical-align: top;
+        }
+
+        .scrolling-text-item {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            opacity: 0;
+            transform: translateY(-100%);
+            transition: all 0.5s ease-in-out;
+            color: #FFBF9B; /* Warna primary */
+            font-weight: 600;
+            text-align: left;
+        }
+
+        .scrolling-text-item.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .scrolling-text-item.next {
+            opacity: 0;
+            transform: translateY(100%);
+        }
     </style>
 </head>
 
 <body class="font-montserrat bg-black bg-[url('https://images.unsplash.com/photo-1605600389423-2d67e7f877ab?q=80&w=1771&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')] bg-cover bg-center min-h-screen">
+
+    <!-- Custom Dot Cursor Element -->
+    <div class="custom-dot-cursor"></div>
+
     <div id="app">
         <!-- Header + NavBar -->
-        <header class="relative px-4 sm:px-8">
+        <header class="relative px-4 sm:px-8 animate-on-scroll z-50">
             <div class="navbar max-w-6xl h-16 pt-6 mx-auto flex items-center justify-between">
                 <div class="navbar_logo cursor-pointer transition-all duration-300 ease-in-out hover:scale-110">
                     <a href="#">
@@ -290,9 +343,7 @@
                 <ul class="navbar_menu hidden md:flex gap-4 lg:gap-8">
                     <li><a href="index.html" class="text-white text-sm lg:text-base font-semibold hover:text-primary active:text-primary">Home</a></li>
                     <li><a href="AboutMe.html" class="text-white text-sm lg:text-base font-semibold hover:text-primary active:text-primary">About Me</a></li>
-                    <li><a href="Services.html" class="text-white text-sm lg:text-base font-semibold hover:text-primary active:text-primary">Services</a></li>
                     <li><a href="Projects.html" class="text-white text-sm lg:text-base font-semibold hover:text-primary active:text-primary">Projects</a></li>
-                    <li><a href="Contacts.html" class="text-white text-sm lg:text-base font-semibold hover:text-primary active:text-primary">Contact</a></li>
                 </ul>
 
                 <div class="btn_bar md:hidden text-white text-2xl cursor-pointer">
@@ -303,33 +354,27 @@
             <div class="dropdown_menu hidden absolute right-4 sm:right-8 top-16 w-64 sm:w-72 bg-white/10 backdrop-blur-lg rounded-xl overflow-hidden transition-all duration-200 ease-[cubic-bezier(0.175,0.885,0.32,1.275)] h-0">
                 <li class="py-3 flex items-center justify-center"><a href="index.html" class="text-white text-base font-semibold hover:text-primary">Home</a></li>
                 <li class="py-3 flex items-center justify-center"><a href="AboutMe.html" class="text-white text-base font-semibold hover:text-primary">About Me</a></li>
-                <li class="py-3 flex items-center justify-center"><a href="Services.html" class="text-white text-base font-semibold hover:text-primary">Services</a></li>
                 <li class="py-3 flex items-center justify-center"><a href="Projects.html" class="text-white text-base font-semibold hover:text-primary">Projects</a></li>
-                <li class="py-3 flex items-center justify-center"><a href="Contacts.html" class="text-white text-base font-semibold hover:text-primary">Contact</a></li>
             </div>
         </header>
 
         <!-- Pengenalan -->
         <section class="homepage px-[5%] sm:px-[9.2%] py-4 flex flex-col md:flex-row items-center justify-center md:gap-20 lg:gap-40">
-            <div class="isi_home flex flex-col items-center md:items-start text-center md:text-left justify-center mt-8 md:mt-12">
-                <h1 class="text-white text-3xl md:text-4xl font-bold leading-none">Hi, It's <span class="text-primary text-3xl md:text-4xl lg:text-5xl">Abdul Adhim</span></h1>
-                <h3 class="text-white text-xl md:text-2xl lg:text-3xl font-semibold mb-6 mt-4 flex items-center justify-center gap-2">
+            <div class="isi_home flex flex-col items-center md:items-start text-center md:text-left justify-center mt-8 md:mt-12 animate-on-scroll">
+                <h1 class="text-white text-3xl md:text-4xl font-bold leading-none animate-on-scroll">Hi, It's <span class="text-primary text-3xl md:text-4xl lg:text-5xl animate-glowing-text">Abdul Adhim</span></h1>
+                <h3 class="text-white text-xl md:text-2xl lg:text-3xl font-semibold mb-6 mt-4 flex justify-center md:justify-start gap-2 animate-on-scroll">
                     I'm a
-                    <span class="relative overflow-hidden h-[2rem] md:h-[2.5rem] inline-block">
-                        <span 
-                            id="typingText"
-                            class="text-primary whitespace-nowrap border-r-2 border-primary pr-1 animate-typing overflow-hidden inline-block"
-                            style="animation-fill-mode: forwards; animation-iteration-count: infinite"
-                        ></span>
-                    </span>
+                    <div class="scrolling-text-container w-[12rem] md:w-[20rem]">
+                        <!-- Teks akan diisi oleh JavaScript -->
+                    </div>
                 </h3>
-                <p class="text-white text-sm md:text-base font-medium leading-snug max-w-[800px] lg:max-w-[1000px]">
+                <p class="text-white text-sm md:text-base font-medium leading-snug max-w-[800px] lg:max-w-[1000px] animate-on-scroll">
                     Welcome to my portofolio website, hope you find
                     what you need.<br>Always happy to be connected via social media below. 
                 </p>
                 
                 <div class="social_media_icon flex mt-8 md:mt-12">
-                    <a href="https://www.linkedin.com/in/m-abdul-adhim-255698158/" class="w-10 h-10 md:w-12 md:h-12 flex justify-center items-center bg-transparent border-2 border-white rounded-full text-lg md:text-xl text-white mr-4 md:mr-8 transition-all duration-300 ease-in-out hover:text-secondary hover:scale-125 hover:-translate-y-1 hover:shadow-lg hover:shadow-white hover:bg-secondary relative overflow-hidden">
+                    <a href="https://www.linkedin.com/in/m-abdul-adhim-255698158/" class="w-10 h-10 md:w-12 md:h-12 flex justify-center items-center bg-transparent border-2 border-white rounded-full text-lg md:text-xl text-white mr-4 md:mr-8 transition-all duration-300 ease-in-out hover:text-secondary hover:scale-125 hover:-translate-y-1 hover:shadow-lg hover:shadow-white hover:bg-secondary relative overflow-hidden animate-on-scroll">
                     <lord-icon
                         src="https://cdn.lordicon.com/fgctxlnd.json"
                         trigger="hover"
@@ -338,7 +383,7 @@
                         style="width:60%;height:60%;position:absolute">
                     </lord-icon>
                     </a>
-                    <a href="https://github.com/adq1p89" class="w-10 h-10 md:w-12 md:h-12 flex justify-center items-center bg-transparent border-2 border-white rounded-full text-lg md:text-xl text-white mr-4 md:mr-8 transition-all duration-300 ease-in-out hover:text-secondary hover:scale-125 hover:-translate-y-1 hover:shadow-lg hover:shadow-white hover:bg-secondary">
+                    <a href="https://github.com/adq1p89" class="w-10 h-10 md:w-12 md:h-12 flex justify-center items-center bg-transparent border-2 border-white rounded-full text-lg md:text-xl text-white mr-4 md:mr-8 transition-all duration-300 ease-in-out hover:text-secondary hover:scale-125 hover:-translate-y-1 hover:shadow-lg hover:shadow-white hover:bg-secondary animate-on-scroll">
                         <lord-icon
                             src="https://cdn.lordicon.com/ioihllwu.json"
                             trigger="hover"
@@ -347,97 +392,162 @@
                         </lord-icon>
                     </a>
                     <a href="https://www.instagram.com/ad_himz/" 
-                    class="w-10 h-10 md:w-12 md:h-12 flex justify-center items-center bg-transparent border-2 border-white rounded-full text-lg md:text-xl text-white mr-4 md:mr-8 transition-all duration-300 ease-in-out hover:text-secondary hover:scale-125 hover:-translate-y-1 hover:shadow-lg hover:shadow-white hover:bg-secondary relative">
+                    class="w-10 h-10 md:w-12 md:h-12 flex justify-center items-center bg-transparent border-2 border-white rounded-full text-lg md:text-xl text-white mr-4 md:mr-8 transition-all duration-300 ease-in-out hover:text-secondary hover:scale-125 hover:-translate-y-1 hover:shadow-lg hover:shadow-white hover:bg-secondary relative animate-on-scroll">
                     <lord-icon
                         src="https://cdn.lordicon.com/wgtaryar.json"
                         trigger="morph"
-                        colors="primary:#ffffff,secondary:#ffbf9b,tertiary:#ffffff,quaternary:#ffbf9b"
+                        colors="primary:#ffffff,secondary:#082c41,tertiary:#ffffff,quaternary:#082c41"
+                        style="width:70%;height:70%">
+                    </lord-icon>
+                    </a>
+
+                    <a href="https://youtube.com/@abdularfwm?si=H47RCo5JLUujl1hK" 
+                    class="w-10 h-10 md:w-12 md:h-12 flex justify-center items-center bg-transparent border-2 border-white rounded-full text-lg md:text-xl text-white mr-4 md:mr-8 transition-all duration-300 ease-in-out hover:text-secondary hover:scale-125 hover:-translate-y-1 hover:shadow-lg hover:shadow-white hover:bg-secondary relative animate-on-scroll">
+                    <lord-icon
+                        src="https://cdn.lordicon.com/dbcganmh.json"
+                        trigger="morph"
+                        colors="primary:#082c41,secondary:#ffffff,tertiary:#ffffff"
                         style="width:70%;height:70%">
                     </lord-icon>
                     </a>
                 </div>
 
                 <div class="btn_group flex flex-col sm:flex-row items-center gap-4 md:gap-8 mt-8 md:mt-12">
-                    <a href="About Me.html" class="btn inline-block px-8 py-3 md:px-11 md:py-4 bg-secondary rounded-full text-sm md:text-base text-white border-2 border-transparent tracking-wider font-bold transition-all duration-300 ease-in-out hover:scale-105 hover:font-extrabold hover:shadow-lg hover:shadow-primary hover:border-primary hover:text-primary">
+                    <a href="About Me.html" class="btn inline-block px-8 py-3 md:px-11 md:py-4 bg-secondary rounded-full text-sm md:text-base text-white border-2 border-transparent tracking-wider font-bold transition-all duration-300 ease-in-out hover:scale-105 hover:font-extrabold hover:shadow-lg hover:shadow-primary hover:border-primary hover:text-primary animate-on-scroll">
                         About Me
                     </a>
-                    <a href="Projects.html" class="btn inline-block px-8 py-3 md:px-11 md:py-4 bg-primary rounded-full text-sm md:text-base text-white border-2 border-primary tracking-wider font-bold transition-all duration-300 ease-in-out hover:scale-105 hover:font-extrabold hover:shadow-lg hover:shadow-secondary hover:bg-primary hover:text-secondary hover:border-secondary">
+                    <a href="Projects.html" class="btn inline-block px-8 py-3 md:px-11 md:py-4 bg-primary rounded-full text-sm md:text-base text-white border-2 border-primary tracking-wider font-bold transition-all duration-300 ease-in-out hover:scale-105 hover:font-extrabold hover:shadow-lg hover:shadow-secondary hover:bg-primary hover:text-secondary hover:border-secondary animate-on-scroll">
                         All Projects
                     </a>
                 </div>
             </div>
 
-            <div class="home_img rounded-full mt-8 md:mt-0">
+            <div class="home_img rounded-full mt-8 md:mt-0 animate-on-scroll">
                 <img src="IMG_20240310_235244.jpg" 
                     alt="Photo Profil" 
                     class="w-56 md:w-[28vw] max-w-sm rounded-full cursor-pointer 
-                        animate-orbiting-shadow hover:shadow-xl hover:shadow-white 
+                        animate-orbiting-shadow 
                         transition-all duration-400 ease-in-out">
             </div>
         </section>
 
-        <!-- Work Together dengan button Contact -->
-        <section class="homepage2 bg-white py-8 md:py-12 flex items-center justify-center text-center w-full min-h-[20vh] px-4 mx-auto">
-            <div class="LWT text-center">
-                <h2 class="LWT_desain text-2xl md:text-3xl font-extrabold bg-clip-text text-transparent bg-[url('https://images.unsplash.com/photo-1605600389423-2d67e7f877ab?q=80&w=1771&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')] px-2 py-1 rounded">
-                    Want to cooperate?
-                </h2>
-                <p class="LWT_subtitle mt-3 md:mt-4 text-sm md:text-base">
-                    Feel free to contact me by clicking the button below
-                </p>
+        <!-- Skills Grid -->
+        <section class="homepage px-[5%] sm:px-[9.2%] py-4 flex flex-col items-center">
+            <!-- Skills Grid -->
+            <div class="skills-grid w-full mt-20 md:mt-28 max-w-6xl">
+                <h1 class="text-white text-3xl md:text-4xl font-bold text-center mb-8 leading-none animate-on-scroll">What Can <span class="text-primary text-3xl md:text-4xl lg:text-5xl gap-2 animate-glowing-text">I Do?</span></h1>
                 
-                <div class="btn_homepage2 flex items-center justify-center mt-6 md:mt-8">
-                    <a href="Contacts.html" class="btn_contact inline-block px-8 py-3 md:px-11 md:py-4 bg-secondary rounded-full text-sm md:text-base text-white border-2 border-transparent tracking-wider font-bold transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-xl hover:shadow-primary hover:font-extrabold hover:text-primary">
-                        Contact Me
-                    </a>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+                    <!-- Skill 1 -->
+                    <div class="skill-card bg-white/10 backdrop-blur-md rounded-2xl p-6 border-2 border-primary/20 hover:border-primary transition-all duration-300 hover:scale-[1.02] group animate-on-scroll">
+                        <div class="skill-icon flex justify-center mb-4 animate-on-scroll">
+                            <lord-icon
+                                src="https://cdn.lordicon.com/xyzxllpb.json"
+                                trigger="morph"
+                                colors="primary:#ffbf9b,secondary:#082c41,tertiary:#082c41"
+                                style="width:80px;height:80px">
+                            </lord-icon>
+                        </div>
+                        <h3 class="text-xl font-bold text-center mb-3 text-white animate-on-scroll">Non-Static Graphic Design</h3>
+                        <p class="text-white/80 text-center text-sm md:text-base animate-on-scroll">
+                            Design 2D or 3D non-static designs such as educational
+                            videos, video reels, YouTube videos, etc. The software
+                            used are Adobe Premiere Pro, Adobe After Effect, Capcut, 
+                            Filmora 12, etc.
+                        </p>
+                    </div>
+                    
+                    <!-- Skill 2 -->
+                    <div class="skill-card bg-white/10 backdrop-blur-md rounded-2xl p-6 border-2 border-primary/20 hover:border-primary transition-all duration-300 hover:scale-[1.02] group animate-on-scroll">
+                        <div class="skill-icon flex justify-center mb-4 animate-on-scroll">
+                            <lord-icon
+                                src="https://cdn.lordicon.com/xzvgfwwv.json"
+                                trigger="morph"
+                                colors="primary:#ffbf9b,secondary:#082c41"
+                                style="width:80px;height:80px">
+                            </lord-icon>
+                        </div>
+                        <h3 class="text-xl font-bold text-center mb-3 text-white animate-on-scroll">UI/UX Design</h3>
+                        <p class="text-white/80 text-center text-sm md:text-base animate-on-scroll">
+                            Crafting intuitive user experiences and beautiful interfaces that enhance user engagement and satisfaction. Design UIs for websites, desktop apps, and mobile 
+                            apps excellently using figma. Especially for mobile applications, you can use Android Studio.
+                        </p>
+                    </div>
+                    
+                    <!-- Skill 3 -->
+                    <div class="skill-card bg-white/10 backdrop-blur-md rounded-2xl p-6 border-2 border-primary/20 hover:border-primary transition-all duration-300 hover:scale-[1.02] group animate-on-scroll">
+                        <div class="skill-icon flex justify-center mb-4 animate-on-scroll">
+                            <lord-icon
+                                src="https://cdn.lordicon.com/czcsywgo.json"
+                                trigger="morph"
+                                colors="primary:#082c41,secondary:#082c41,tertiary:#ffffff,quaternary:#ffbf9b,quinary:#ffffff,senary:#f9c9c0"
+                                style="width:80px;height:80px">
+                            </lord-icon>
+                        </div>
+                        <h3 class="text-xl font-bold text-center mb-3 text-white animate-on-scroll">Static Graphic Design</h3>
+                        <p class="text-white/80 text-center text-sm md:text-base animate-on-scroll">
+                            Design 2D or 3D static designs such as posters, photo
+                            editing, simple logo design, PowerPoint design,
+                            etc. Software used are Adobe Photoshop, CorelDRAW,
+                            Adobe Illustrator, Ms. Office PowerPoint, etc.
+                        </p>
+                    </div>
                 </div>
             </div>
         </section>
 
         <!-- Footer Website -->
-        <footer class="footer relative w-full py-8 md:py-10 bg-secondary">
+        <footer class="footer relative w-full py-8 md:py-10 bg-secondary animate-on-scroll">
             <div class="social text-center pb-4 md:pb-6 text-white">
                 <a href="https://www.linkedin.com/in/m-abdul-adhim-255698158/" 
-                class="w-8 h-8 md:w-10 md:h-10 inline-flex items-center justify-center rounded-full mx-1 md:mx-2 transition-all duration-300 ease-in-out hover:scale-110 hover:-translate-y-2 hover:bg-primary hover:text-secondary relative overflow-hidden">
+                class="w-8 h-8 md:w-10 md:h-10 inline-flex items-center justify-center rounded-full mx-1 md:mx-2 transition-all duration-300 ease-in-out hover:scale-110 hover:-translate-y-2 hover:bg-primary hover:text-secondary relative overflow-hidden animate-on-scroll">
                 <lord-icon
                     src="https://cdn.lordicon.com/fgctxlnd.json"
                     trigger="hover"
                     state="hover-draw"
                     colors="primary:#ffffff,secondary:#b4b4b4"
-                    style="width:60%;height:60%;position:absolute">
+                    style="width:60%;height:60%">
                 </lord-icon>
                 </a>
                 
                 <a href="https://github.com/adq1p89" 
-                class="w-8 h-8 md:w-10 md:h-10 inline-flex items-center justify-center rounded-full mx-1 md:mx-2 transition-all duration-300 ease-in-out hover:scale-110 hover:-translate-y-2 hover:bg-primary hover:text-secondary relative overflow-hidden">
+                class="w-8 h-8 md:w-10 md:h-10 inline-flex items-center justify-center rounded-full mx-1 md:mx-2 transition-all duration-300 ease-in-out hover:scale-110 hover:-translate-y-2 hover:bg-primary hover:text-secondary relative overflow-hidden animate-on-scroll">
                 <lord-icon
                     src="https://cdn.lordicon.com/ioihllwu.json"
                     trigger="hover"
                     colors="primary:#082c41,secondary:#ffffff"
-                    style="width:80%;height:80%;position:absolute">
+                    style="width:80%;height:80%">
                 </lord-icon>
                 </a>
                 
                 <a href="https://www.instagram.com/ad_himz/" 
-                class="w-8 h-8 md:w-10 md:h-10 inline-flex items-center justify-center rounded-full mx-1 md:mx-2 transition-all duration-300 ease-in-out hover:scale-110 hover:-translate-y-2 hover:bg-primary hover:text-secondary relative overflow-hidden">
+                class="w-8 h-8 md:w-10 md:h-10 inline-flex items-center justify-center rounded-full mx-1 md:mx-2 transition-all duration-300 ease-in-out hover:scale-110 hover:-translate-y-2 hover:bg-primary hover:text-secondary relative overflow-hidden animate-on-scroll">
                 <lord-icon
                     src="https://cdn.lordicon.com/wgtaryar.json"
                     trigger="morph"
-                    colors="primary:#ffffff,secondary:#ffbf9b,tertiary:#ffffff,quaternary:#ffbf9b"
-                    style="width:70%;height:70%;position:absolute">
+                    colors="primary:#ffffff,secondary:#082c41,tertiary:#ffffff,quaternary:#082c41"
+                    style="width:70%;height:70%">
+                </lord-icon>
+                </a>
+
+                <a href="https://youtube.com/@abdularfwm?si=H47RCo5JLUujl1hK" 
+                class="w-8 h-8 md:w-10 md:h-10 inline-flex items-center justify-center rounded-full mx-1 md:mx-2 transition-all duration-300 ease-in-out hover:scale-110 hover:-translate-y-2 hover:bg-primary hover:text-secondary relative overflow-hidden animate-on-scroll">
+                <lord-icon
+                    src="https://cdn.lordicon.com/dbcganmh.json"
+                    trigger="morph"
+                    colors="primary:#082c41,secondary:#ffffff,tertiary:#ffffff"
+                    style="width:70%;height:70%">
                 </lord-icon>
                 </a>
             </div>
 
             <ul class="list m-0 p-0 text-base md:text-lg leading-normal text-center mb-0">
-                <li class="inline-block px-2 md:px-4"><a href="index.html" class="text-white">Home</a></li>
-                <li class="inline-block px-2 md:px-4"><a href="About Me.html" class="text-white">About Me</a></li>
-                <li class="inline-block px-2 md:px-4"><a href="Services.html" class="text-white">Services</a></li>
-                <li class="inline-block px-2 md:px-4"><a href="Projects.html" class="text-white">Projects</a></li>
-                <li class="inline-block px-2 md:px-4"><a href="Contacts.html" class="text-white">Contact</a></li>
+                <li class="inline-block px-2 md:px-4"><a href="index.html" class="text-white animate-on-scroll">Home</a></li>
+                <li class="inline-block px-2 md:px-4"><a href="About Me.html" class="text-white animate-on-scroll">About Me</a></li>
+                <li class="inline-block px-2 md:px-4"><a href="Projects.html" class="text-white animate-on-scroll">Projects</a></li>
             </ul>
-            <p class="copyright mt-8 md:mt-12 text-center text-sm md:text-base text-white pb-4">
-                2025&nbsp;&nbsp;&nbsp;© Ad_himZ&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;All Rights Reserved
+            <p class="copyright mt-8 md:mt-12 text-center text-sm md:text-base text-white pb-4 animate-on-scroll">
+                © 2025 Ad_himZ&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;All Rights Reserved
             </p>
         </footer>
     </div>
@@ -451,7 +561,8 @@
                 // Initialize Lenis for smooth scrolling
                 const lenis = new Lenis({
                     lerp: 0.1,
-                    smooth: true,
+                    smoothWheel: true,
+                    smoothTouch: true,
                 });
                 
                 function raf(time) {
@@ -467,8 +578,19 @@
                 const dropDownMenu = document.querySelector('.dropdown_menu');
                 
                 btnBar.onclick = function() {
-                    dropDownMenu.classList.toggle('h-[210px]');
-                    dropDownMenu.classList.toggle('hidden');
+                    if (dropDownMenu.classList.contains('h-0')) {
+                        dropDownMenu.classList.remove('h-0');
+                        dropDownMenu.classList.add('h-[210px]'); // Sesuaikan height jika perlu
+                        dropDownMenu.classList.remove('hidden');
+                    } else {
+                        dropDownMenu.classList.add('h-0');
+                        dropDownMenu.classList.remove('h-[210px]');
+                        // Tambahkan event listener untuk 'transitionend' agar 'hidden' ditambahkan setelah transisi selesai
+                        dropDownMenu.addEventListener('transitionend', function handler() {
+                            dropDownMenu.classList.add('hidden');
+                            dropDownMenu.removeEventListener('transitionend', handler);
+                        });
+                    }
                     
                     const isOpen = dropDownMenu.classList.contains('h-[210px]');
                     btnBarIcon.classList = isOpen 
@@ -478,45 +600,148 @@
             }
         }).mount('#app');
 
-        const words = ["Graphic Designer", "Web Designer", "UI/UX Designer"];
-        let wordIndex = 0;
-        let charIndex = 0;
-        let isDeleting = false;
-        let isEnd = false;
-        const typingSpeed = 150;
-        const deletingSpeed = 50;
-        const delayBetweenWords = 2000;
-
-        const typingText = document.getElementById('typingText');
-
-        function type() {
-        const currentWord = words[wordIndex];
-        const currentChar = currentWord.substring(0, charIndex);
-        
-        typingText.textContent = currentChar;
-        typingText.classList.add('animate-typing');
-        typingText.classList.add('animate-blink-caret');
-        
-        if (!isDeleting && charIndex < currentWord.length) {
-            // Mengetik
-            charIndex++;
-            setTimeout(type, typingSpeed);
-        } else if (isDeleting && charIndex > 0) {
-            // Menghapus
-            charIndex--;
-            setTimeout(type, deletingSpeed);
-        } else {
-            // Ganti kata
-            isDeleting = !isDeleting;
-            if (!isDeleting) {
-            wordIndex = (wordIndex + 1) % words.length;
-            }
-            setTimeout(type, delayBetweenWords);
-        }
-        }
-
         document.addEventListener("DOMContentLoaded", () => {
-        type();
+            const btnBar = document.querySelector('.btn_bar');
+            const btnBarIcon = document.querySelector('.btn_bar i');
+            const dropDownMenu = document.querySelector('.dropdown_menu');
+            
+            btnBar.onclick = function() {
+                const isOpen = dropDownMenu.classList.toggle('h-[150px]');
+                dropDownMenu.classList.toggle('h-0');
+                dropDownMenu.classList.toggle('hidden', !isOpen);
+                btnBarIcon.className = isOpen ? 'fa-solid fa-xmark' : 'fa-solid fa-bars';
+            }
+
+            const lenis = new Lenis({
+                lerp: 0.1,
+                smoothWheel: true,
+            });
+            function raf(time) {
+                lenis.raf(time);
+                requestAnimationFrame(raf);
+            }
+            requestAnimationFrame(raf);
+            
+            // Scrolling Text Logic
+            const words = ["Graphic Designer", "Web Designer", "UI/UX Designer"];
+            let currentIndex = 0;
+            const textContainer = document.querySelector('.scrolling-text-container');
+            if (textContainer) {
+                words.forEach((word, index) => {
+                    const textElement = document.createElement('div');
+                    textElement.className = `scrolling-text-item ${index === 0 ? 'active' : ''}`;
+                    textElement.textContent = word;
+                    textContainer.appendChild(textElement);
+                });
+
+                setInterval(() => {
+                    const slides = textContainer.children;
+                    const currentSlide = slides[currentIndex];
+                    const nextIndex = (currentIndex + 1) % slides.length;
+                    const nextSlide = slides[nextIndex];
+
+                    currentSlide.classList.remove('active');
+                    currentSlide.classList.add('next');
+                    
+                    setTimeout(() => {
+                        currentSlide.classList.remove('next');
+                        nextSlide.classList.add('active');
+                        currentIndex = nextIndex;
+                    }, 500);
+                }, 3000);
+            }
+
+            // Custom Cursor Logic
+            const dotCursorEl = document.querySelector('.custom-dot-cursor');
+            if(dotCursorEl) {
+                let mouseX = 0, mouseY = 0, cursorX = 0, cursorY = 0;
+                const delay = 0.12;
+                // Define your primary and secondary colors here
+                const primaryColor = '#FFBF9B';
+                const secondaryColor = '#082c41';
+
+                /**
+                 * Helper function to get the background color of an element,
+                 * traversing up the DOM if the element's background is transparent.
+                 */
+                function getBackgroundColor(element) {
+                    let currentElement = element;
+                    while (currentElement) {
+                        const color = window.getComputedStyle(currentElement).backgroundColor;
+                        if (color && color !== 'rgba(0, 0, 0, 0)' && color !== 'transparent') {
+                            return color;
+                        }
+                        currentElement = currentElement.parentElement;
+                    }
+                    return 'rgb(0, 0, 0)'; // Default to black if no color is found
+                }
+
+                /**
+                 * Helper function to calculate the luminance of an RGB color.
+                 * This helps determine if a color is "light" or "dark".
+                 */
+                function getLuminance(bgColor) {
+                    // Extract R, G, B values from 'rgb(r, g, b)' string
+                    const rgb = bgColor.match(/\d+/g);
+                    if (!rgb) return 0;
+                    
+                    const r = parseInt(rgb[0]);
+                    const g = parseInt(rgb[1]);
+                    const b = parseInt(rgb[2]);
+
+                    // Formula for perceived brightness
+                    return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+                }
+                
+                document.addEventListener('mousemove', (e) => {
+                    mouseX = e.clientX;
+                    mouseY = e.clientY;
+
+                    // Hide original cursor so only custom one is visible
+                    // And get the element under the mouse
+                    const elementUnderCursor = document.elementFromPoint(mouseX, mouseY);
+                    if (elementUnderCursor) {
+                        
+                        // Get its computed background color
+                        const bgColor = getBackgroundColor(elementUnderCursor);
+                        
+                        // Calculate luminance
+                        const luminance = getLuminance(bgColor);
+                        
+                        // Set cursor color based on luminance
+                        // A threshold of 140 is a good starting point
+                        if (luminance > 140) {
+                            // Background is LIGHT, so cursor should be DARK (secondary)
+                            dotCursorEl.style.backgroundColor = secondaryColor;
+                        } else {
+                            // Background is DARK, so cursor should be LIGHT (primary)
+                            dotCursorEl.style.backgroundColor = primaryColor;
+                        }
+                    }
+                });
+
+                function updateDotCursor() {
+                    cursorX += (mouseX - cursorX) * delay;
+                    cursorY += (mouseY - cursorY) * delay;
+                    dotCursorEl.style.transform = `translate3d(${cursorX - (dotCursorEl.offsetWidth / 2)}px, ${cursorY - (dotCursorEl.offsetHeight / 2)}px, 0)`;
+                    requestAnimationFrame(updateDotCursor);
+                }
+                requestAnimationFrame(updateDotCursor);
+                
+                document.querySelectorAll('a, button, [onclick], .skill-card, .home_img img').forEach(el => {
+                    el.addEventListener('mouseenter', () => dotCursorEl.classList.add('hovered'));
+                    el.addEventListener('mouseleave', () => dotCursorEl.classList.remove('hovered'));
+                });
+            }
+
+            // Intersection Observer for scroll animations
+            const animatedElements = document.querySelectorAll('.animate-on-scroll');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    entry.target.classList.toggle('in-view', entry.isIntersecting);
+                });
+            }, { threshold: 0.2 });
+            animatedElements.forEach(el => observer.observe(el));
         });
     </script>
 </body>

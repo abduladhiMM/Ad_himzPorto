@@ -19,8 +19,7 @@
                         secondary: '#082c41',
                     },
                     animation: {
-                        'typing': 'typing 3.5s steps(40, end)',
-                        'blink-caret': 'blink-caret 0.75s step-end infinite',
+                        'glowing-text': 'glowing-text 4s linear infinite',
                         'orbiting-shadow': 'orbiting-shadow 4s linear infinite',
                     },
                     keyframes: {
@@ -38,6 +37,13 @@
                             '50%': { 'box-shadow': '-15px 0 20px -5px rgba(255, 255, 255, 0.7)' },
                             '75%': { 'box-shadow': '0 -15px 20px -5px rgba(255, 255, 255, 0.7)' },
                             '100%': { 'box-shadow': '15px 0 20px -5px rgba(255, 255, 255, 0.7)' }
+                        },
+                        'glowing-text': { // Keyframes untuk animasi glowing
+                            '20%': { 'text-shadow': '5px 0px 15px #FFBF9B' },
+                            '35%': { 'text-shadow': '0px 5px 15px #FFBF9B' },
+                            '50%': { 'text-shadow': '-5px 0px 15px #FFBF9B' },
+                            '35%': { 'text-shadow': '0px -5px 15px #FFBF9B' },
+                            '20%': { 'text-shadow': '5px 0px 15px #FFBF9B' }
                         }
                     }
                 }
@@ -437,13 +443,60 @@
             position: relative;
             z-index: 100;
         }
+
+        /* Custom Dot Cursor Styles */
+        .custom-dot-cursor {
+            position: fixed;
+            left: 0; /* Initial position, will be updated by JS */
+            top: 0;  /* Initial position, will be updated by JS */
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            /* transform: translate(-50%, -50%); Dihapus karena kita akan set transform via JS */
+            transition: width 0.2s ease, height 0.2s ease, background-color 0.2s ease; /* Untuk efek hover */
+        }
+        .custom-dot-cursor.hovered { /* Jika ingin ada efek hover pada cursor */
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Animasi In/Out Styles */
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(25px);
+            transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+        }
+        .animate-on-scroll.in-view {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Pastikan body tidak ada overflow-x jika animasi menyebabkan sedikit pergeseran */
+        body {
+            overflow-x: hidden;
+        }
+
+        /* Ganti CSS untuk animasi text-slide dengan ini */
+        .scrolling-text-container {
+            position: relative;
+            display: inline-block;
+            height: 2.5rem;
+            overflow: hidden;
+            vertical-align: top;
+        }
     </style>
 </head>
 
 <body class="font-montserrat bg-black bg-[url('https://images.unsplash.com/photo-1605600389423-2d67e7f877ab?q=80&w=1771&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')] bg-cover bg-center">
+    
+    <!-- Custom Dot Cursor Element -->
+    <div class="custom-dot-cursor"></div>
+
     <div id="app" class="flex flex-col min-h-screen">
         <!-- Header + NavBar -->
-        <header class="relative px-4 sm:px-8 z-50">
+        <header class="relative px-4 sm:px-8 animate-on-scroll z-50">
             <div class="navbar max-w-6xl h-16 pt-6 mx-auto flex items-center justify-between">
                 <div class="navbar_logo cursor-pointer transition-all duration-300 ease-in-out hover:scale-110">
                     <a href="#">
@@ -454,9 +507,7 @@
                 <ul class="navbar_menu hidden md:flex gap-4 lg:gap-8">
                     <li><a href="index.html" class="text-white text-sm lg:text-base font-semibold hover:text-primary active:text-primary">Home</a></li>
                     <li><a href="AboutMe.html" class="text-white text-sm lg:text-base font-semibold hover:text-primary active:text-primary">About Me</a></li>
-                    <li><a href="Services.html" class="text-white text-sm lg:text-base font-semibold hover:text-primary active:text-primary">Services</a></li>
                     <li><a href="Projects.html" class="text-white text-sm lg:text-base font-semibold hover:text-primary active:text-primary">Projects</a></li>
-                    <li><a href="Contacts.html" class="text-white text-sm lg:text-base font-semibold hover:text-primary active:text-primary">Contact</a></li>
                 </ul>
 
                 <div class="btn_bar md:hidden text-white text-2xl cursor-pointer">
@@ -467,20 +518,18 @@
             <div class="dropdown_menu hidden absolute right-4 sm:right-8 top-16 w-64 sm:w-72 bg-white/10 backdrop-blur-lg rounded-xl overflow-hidden transition-all duration-200 ease-[cubic-bezier(0.175,0.885,0.32,1.275)] h-0">
                 <li class="py-3 flex items-center justify-center"><a href="index.html" class="text-white text-base font-semibold hover:text-primary">Home</a></li>
                 <li class="py-3 flex items-center justify-center"><a href="AboutMe.html" class="text-white text-base font-semibold hover:text-primary">About Me</a></li>
-                <li class="py-3 flex items-center justify-center"><a href="Services.html" class="text-white text-base font-semibold hover:text-primary">Services</a></li>
                 <li class="py-3 flex items-center justify-center"><a href="Projects.html" class="text-white text-base font-semibold hover:text-primary">Projects</a></li>
-                <li class="py-3 flex items-center justify-center"><a href="Contacts.html" class="text-white text-base font-semibold hover:text-primary">Contact</a></li>
             </div>
         </header>
 
         <!-- All My Project -->
         <main class="flex-grow z-10">
-            <section class="projects-section py-12 px-4 sm:px-8">
+            <section class="projects-section py-12 px-4 sm:px-8 animate-on-scroll">
                 <div class="container_projects">
-                    <h1 class="text-white text-3xl md:text-4xl font-bold text-center mb-8 leading-none">All <span class="text-primary text-3xl md:text-4xl lg:text-5xl gap-2">My Project</span></h1>
+                    <h1 class="text-white text-3xl md:text-4xl font-bold text-center mb-8 leading-none animate-on-scroll">All <span class="text-primary text-3xl md:text-4xl lg:text-5xl gap-2 animate-glowing-text">My Project</span></h1>
                     
                     <!-- Swiper container -->
-                    <div class="swiper-container">
+                    <div class="swiper-container animate-on-scroll">
                         <div class="swiper-wrapper">
                             <!-- Slides -->
                             <div class="swiper-slide" style="background-image: url('https://www.dropbox.com/scl/fi/azpds8z7s1nz0y89vsrwq/Desain-Figma.png?rlkey=i0bv1u23su65vd89857ko2vot&st=rcl3q32u&raw=1');">
@@ -589,33 +638,33 @@
             </section>
 
             <!-- Project Grid -->
-            <section class="homepage px-[5%] sm:px-[9.2%] py-4 flex flex-col items-center">
+            <section class="homepage px-[5%] sm:px-[9.2%] py-4 flex flex-col items-center animate-on-scroll">
                 <!-- Project Grid -->
                 <div class="skills-grid w-full mt-20 md:mt-28 max-w-6xl">
-                    <h1 class="text-white text-3xl md:text-4xl font-bold text-center mb-8 leading-none">All New <span class="text-primary text-3xl md:text-4xl lg:text-5xl gap-2">My Project</span></h1>
+                    <h1 class="text-white text-3xl md:text-4xl font-bold text-center mb-8 leading-none animate-on-scroll">All New <span class="text-primary text-3xl md:text-4xl lg:text-5xl gap-2 animate-glowing-text">My Project</span></h1>
                     
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
                         <!-- Project 1 -->
-                        <div class="skill-card bg-white/10 backdrop-blur-md rounded-2xl p-6 border-2 border-primary/20 hover:border-primary transition-all duration-300 hover:scale-[1.02] group">
-                            <div class="video-container mb-4 relative pb-[56.25%] h-0 overflow-hidden rounded-lg">
+                        <div class="skill-card bg-white/10 backdrop-blur-md rounded-2xl p-6 border-2 border-primary/20 hover:border-primary transition-all duration-300 hover:scale-[1.02] group animate-on-scroll">
+                            <div class="video-container mb-4 relative pb-[56.25%] h-0 overflow-hidden rounded-lg animate-on-scroll">
                                 <iframe src="https://1drv.ms/p/c/6132419a28776d5d/IQSGuPlU59nYQpbj9lMmZZI9ARJDAiCkZ59fzZ7k9gqvXxM" width="402" height="327" frameborder="0" scrolling="no"></iframe>
                             </div>
-                            <div class="video-container mb-4 relative pb-[56.25%] h-0 overflow-hidden rounded-lg">
+                            <div class="video-container mb-4 relative pb-[56.25%] h-0 overflow-hidden rounded-lg animate-on-scroll">
                                 <iframe src="https://1drv.ms/w/c/6132419a28776d5d/IQT90dR_lMk4SqkoYxeguNYBAZV99i3tpyZyv0cJiqdWgQ8" width="476" height="288" frameborder="0" scrolling="no"></iframe>
                             </div>
-                            <h1 class="text-3xl font-bold text-center mb-3 text-secondary">Grafikom Homework 1</h1>
-                            <h3 class="text-xl font-semibold text-center mb-3 text-white">Tokoh Perintis Grafika Komputer</h3>
-                            <p class="text-white/80 text-center text-sm md:text-base">
+                            <h1 class="text-3xl font-bold text-center mb-3 text-secondary animate-on-scroll">Grafikom Homework 1</h1>
+                            <h3 class="text-xl font-semibold text-center mb-3 text-white animate-on-scroll">Tokoh Perintis Grafika Komputer</h3>
+                            <p class="text-white/80 text-center text-sm md:text-base animate-on-scroll">
                                 Presentasi dan Penjelasan tentang tokoh-tokoh perintis dalam bidang grafika komputer.
                             </p>
                         </div>
                         
                         <!-- Project 2 -->
-                        <div class="skill-card bg-white/10 backdrop-blur-md rounded-2xl p-6 border-2 border-primary/20 hover:border-primary transition-all duration-300 hover:scale-[1.02] group">
-                            <div class="video-container mb-4 relative pb-[56.25%] h-0 overflow-hidden rounded-lg">
+                        <div class="skill-card bg-white/10 backdrop-blur-md rounded-2xl p-6 border-2 border-primary/20 hover:border-primary transition-all duration-300 hover:scale-[1.02] group animate-on-scroll">
+                            <div class="video-container mb-4 relative pb-[56.25%] h-0 overflow-hidden rounded-lg animate-on-scroll">
                                 <iframe src="https://1drv.ms/w/c/6132419a28776d5d/IQTDT67n5qEySq0n7_YnUT9xAeGN1plNGE9KAudb89Zm5rM" width="476" height="288" frameborder="0" scrolling="no"></iframe>
                             </div>
-                            <div class="video-container mb-4 relative pb-[56.25%] h-0 overflow-hidden rounded-lg">
+                            <div class="video-container mb-4 relative pb-[56.25%] h-0 overflow-hidden rounded-lg animate-on-scroll">
                                 <iframe 
                                     class="absolute top-0 left-0 w-full h-full"
                                     src="https://drive.google.com/file/d/1OqcnJ3aA8Z7sgwlKcWxNtd2brULrjw71/preview" 
@@ -623,40 +672,40 @@
                                     allowfullscreen>
                                 </iframe>
                             </div>
-                            <h1 class="text-3xl font-bold text-center mb-3 text-secondary">Grafikom Homework 2</h1>
-                            <h3 class="text-xl font-bold text-center mb-3 text-white">Algoritma Pembentukan Garis</h3>
-                            <p class="text-white/80 text-center text-sm md:text-base">
+                            <h1 class="text-3xl font-bold text-center mb-3 text-secondary animate-on-scroll">Grafikom Homework 2</h1>
+                            <h3 class="text-xl font-bold text-center mb-3 text-white animate-on-scroll">Algoritma Pembentukan Garis</h3>
+                            <p class="text-white/80 text-center text-sm md:text-base animate-on-scroll">
                                 Penjelasan tentang algoritma pembentukan grais dalam bidang grafika komputer.
                             </p>
                         </div>
                         
                         <!-- Project 3 -->
-                        <div class="skill-card bg-white/10 backdrop-blur-md rounded-2xl p-6 border-2 border-primary/20 hover:border-primary transition-all duration-300 hover:scale-[1.02] group">
-                            <div class="video-container mb-4 relative pb-[56.25%] h-0 overflow-hidden rounded-lg">
+                        <div class="skill-card bg-white/10 backdrop-blur-md rounded-2xl p-6 border-2 border-primary/20 hover:border-primary transition-all duration-300 hover:scale-[1.02] group animate-on-scroll">
+                            <div class="video-container mb-4 relative pb-[56.25%] h-0 overflow-hidden rounded-lg animate-on-scroll">
                                 <iframe src="https://1drv.ms/w/c/6132419a28776d5d/IQR3qQad5l6SS5ICVPaukOjhAXp0h49Dh4NKIDfP5QREw-A" width="476" height="288" frameborder="0" scrolling="no"></iframe>
                             </div>
-                            <h1 class="text-3xl font-bold text-center mb-3 text-secondary">Grafikom Homework 3</h1>
-                            <h3 class="text-xl font-bold text-center mb-3 text-white">Algoritma Pembentukan Lingkaran</h3>
-                            <p class="text-white/80 text-center text-sm md:text-base">
+                            <h1 class="text-3xl font-bold text-center mb-3 text-secondary animate-on-scroll animate-on-scroll">Grafikom Homework 3</h1>
+                            <h3 class="text-xl font-bold text-center mb-3 text-white animate-on-scroll">Algoritma Pembentukan Lingkaran</h3>
+                            <p class="text-white/80 text-center text-sm md:text-base animate-on-scroll">
                                 Penjelasan tentang algoritma pembentukan lingkaran dalam bidang grafika komputer.
                             </p>
                         </div>
 
                         <!-- Project 4 -->
-                        <div class="skill-card bg-white/10 backdrop-blur-md rounded-2xl p-6 border-2 border-primary/20 hover:border-primary transition-all duration-300 hover:scale-[1.02] group">
-                            <div class="video-container mb-4 relative pb-[56.25%] h-0 overflow-hidden rounded-lg">
+                        <div class="skill-card bg-white/10 backdrop-blur-md rounded-2xl p-6 border-2 border-primary/20 hover:border-primary transition-all duration-300 hover:scale-[1.02] group animate-on-scroll">
+                            <div class="video-container mb-4 relative pb-[56.25%] h-0 overflow-hidden rounded-lg animate-on-scroll">
                                 <iframe src="https://1drv.ms/w/c/6132419a28776d5d/IQT2zzxbDVNPSrr6tJ2R3sHPAbn1VxUZ4nhGwKaFvZJOqIA" width="476" height="288" frameborder="0" scrolling="no"></iframe>
                             </div>
-                            <h1 class="text-3xl font-bold text-center mb-3 text-secondary">Grafikom Homework 4</h1>
-                            <h3 class="text-xl font-bold text-center mb-3 text-white">Algoritma Pembentukan Kurva</h3>
-                            <p class="text-white/80 text-center text-sm md:text-base">
+                            <h1 class="text-3xl font-bold text-center mb-3 text-secondary animate-on-scroll">Grafikom Homework 4</h1>
+                            <h3 class="text-xl font-bold text-center mb-3 text-white animate-on-scroll">Algoritma Pembentukan Kurva</h3>
+                            <p class="text-white/80 text-center text-sm md:text-base animate-on-scroll">
                                 Penjelasan tentang algoritma pembentukan kurva dalam bidang grafika komputer.
                             </p>
                         </div>
 
                         <!-- Project 5 -->
-                        <div class="skill-card bg-white/10 backdrop-blur-md rounded-2xl p-6 border-2 border-primary/20 hover:border-primary transition-all duration-300 hover:scale-[1.02] group">
-                            <div class="video-container mb-4 relative pb-[56.25%] h-0 overflow-hidden rounded-lg">
+                        <div class="skill-card bg-white/10 backdrop-blur-md rounded-2xl p-6 border-2 border-primary/20 hover:border-primary transition-all duration-300 hover:scale-[1.02] group animate-on-scroll">
+                            <div class="video-container mb-4 relative pb-[56.25%] h-0 overflow-hidden rounded-lg animate-on-scroll">
                                 <iframe 
                                     class="absolute top-0 left-0 w-full h-full"
                                     src="https://www.youtube.com/embed/0-nYMoj0GzI"
@@ -665,16 +714,16 @@
                                     allowfullscreen>
                                 </iframe>
                             </div>
-                            <h1 class="text-3xl font-bold text-center mb-3 text-secondary">Grafikom Quiz 1</h1>
-                            <h3 class="text-xl font-bold text-center mb-3 text-primary">Penggambaran Grafik 2D</h3>
-                            <p class="text-white/80 text-center text-sm md:text-base">
+                            <h1 class="text-3xl font-bold text-center mb-3 text-secondary animate-on-scroll">Grafikom Quiz 1</h1>
+                            <h3 class="text-xl font-bold text-center mb-3 text-primary animate-on-scroll">Penggambaran Grafik 2D</h3>
+                            <p class="text-white/80 text-center text-sm md:text-base animate-on-scroll">
                                 Video penjelasan tentang menggambarkan grafik 2D dalam grafika komputer.
                             </p>
                         </div>
                         
                         <!-- Project 6 -->
-                        <div class="skill-card bg-white/10 backdrop-blur-md rounded-2xl p-6 border-2 border-primary/20 hover:border-primary transition-all duration-300 hover:scale-[1.02] group">
-                            <div class="video-container mb-4 relative pb-[56.25%] h-0 overflow-hidden rounded-lg">
+                        <div class="skill-card bg-white/10 backdrop-blur-md rounded-2xl p-6 border-2 border-primary/20 hover:border-primary transition-all duration-300 hover:scale-[1.02] group animate-on-scroll">
+                            <div class="video-container mb-4 relative pb-[56.25%] h-0 overflow-hidden rounded-lg animate-on-scroll">
                                 <iframe 
                                     class="absolute top-0 left-0 w-full h-full"
                                     src="https://www.youtube.com/embed/XzKqGMWFYfw?autoplay=0&rel=0"
@@ -683,16 +732,16 @@
                                     allowfullscreen>
                                 </iframe>
                             </div>
-                            <h1 class="text-3xl font-bold text-center mb-3 text-secondary">Grafikom Quiz 2</h1>
-                            <h3 class="text-xl font-bold text-center mb-3 text-primary">Transformasi 2D</h3>
-                            <p class="text-white/80 text-center text-sm md:text-base">
+                            <h1 class="text-3xl font-bold text-center mb-3 text-secondary animate-on-scroll">Grafikom Quiz 2</h1>
+                            <h3 class="text-xl font-bold text-center mb-3 text-primary animate-on-scroll">Transformasi 2D</h3>
+                            <p class="text-white/80 text-center text-sm md:text-base animate-on-scroll">
                                 Video penjelasan tentang transformasi 2D dalam grafika komputer.
                             </p>
                         </div>
 
                         <!-- Project 7 -->
-                        <div class="skill-card bg-white/10 backdrop-blur-md rounded-2xl p-6 border-2 border-primary/20 hover:border-primary transition-all duration-300 hover:scale-[1.02] group">
-                            <div class="video-container mb-4 relative pb-[56.25%] h-0 overflow-hidden rounded-lg">
+                        <div class="skill-card bg-white/10 backdrop-blur-md rounded-2xl p-6 border-2 border-primary/20 hover:border-primary transition-all duration-300 hover:scale-[1.02] group animate-on-scroll">
+                            <div class="video-container mb-4 relative pb-[56.25%] h-0 overflow-hidden rounded-lg animate-on-scroll">
                                 <iframe 
                                     class="absolute top-0 left-0 w-full h-full"
                                     src="https://www.youtube.com/embed/S9R-I1fJ7dc"
@@ -701,16 +750,16 @@
                                     allowfullscreen>
                                 </iframe>
                             </div>
-                            <h1 class="text-3xl font-bold text-center mb-3 text-secondary">Grafikom Quiz 3</h1>
-                            <h3 class="text-xl font-bold text-center mb-3 text-primary">Line Clipping Algorithm</h3>
-                            <p class="text-white/80 text-center text-sm md:text-base">
+                            <h1 class="text-3xl font-bold text-center mb-3 text-secondary animate-on-scroll">Grafikom Quiz 3</h1>
+                            <h3 class="text-xl font-bold text-center mb-3 text-primary animate-on-scroll">Line Clipping Algorithm</h3>
+                            <p class="text-white/80 text-center text-sm md:text-base animate-on-scroll">
                                 Video penjelasan tentang algoritma pemotongan garis dalam grafika komputer.
                             </p>
                         </div>
 
                         <!-- Project 8 -->
-                        <div class="skill-card bg-white/10 backdrop-blur-md rounded-2xl p-6 border-2 border-primary/20 hover:border-primary transition-all duration-300 hover:scale-[1.02] group">
-                            <div class="video-container mb-4 relative pb-[56.25%] h-0 overflow-hidden rounded-lg">
+                        <div class="skill-card bg-white/10 backdrop-blur-md rounded-2xl p-6 border-2 border-primary/20 hover:border-primary transition-all duration-300 hover:scale-[1.02] group animate-on-scroll">
+                            <div class="video-container mb-4 relative pb-[56.25%] h-0 overflow-hidden rounded-lg animate-on-scroll">
                                 <iframe 
                                     class="absolute top-0 left-0 w-full h-full"
                                     src="https://www.youtube.com/embed/sywupXOZ60A"
@@ -719,9 +768,9 @@
                                     allowfullscreen>
                                 </iframe>
                             </div>
-                            <h1 class="text-3xl font-bold text-center mb-3 text-secondary">Grafikom Quiz 4</h1>
-                            <h3 class="text-xl font-bold text-center mb-3 text-primary">Polygon Clipping Algorithm</h3>
-                            <p class="text-white/80 text-center text-sm md:text-base">
+                            <h1 class="text-3xl font-bold text-center mb-3 text-secondary animate-on-scroll">Grafikom Quiz 4</h1>
+                            <h3 class="text-xl font-bold text-center mb-3 text-primary animate-on-scroll">Polygon Clipping Algorithm</h3>
+                            <p class="text-white/80 text-center text-sm md:text-base animate-on-scroll">
                                 Video penjelasan tentang algoritma pemotongan polygon dalam grafika komputer.
                             </p>
                         </div>
@@ -731,49 +780,57 @@
         </main>
 
         <!-- Footer Website -->
-        <footer class="footer w-full py-8 md:py-10 bg-secondary">
+        <footer class="footer relative w-full py-8 md:py-10 bg-secondary animate-on-scroll">
             <div class="social text-center pb-4 md:pb-6 text-white">
                 <a href="https://www.linkedin.com/in/m-abdul-adhim-255698158/" 
-                class="w-8 h-8 md:w-10 md:h-10 inline-flex items-center justify-center rounded-full mx-1 md:mx-2 transition-all duration-300 ease-in-out hover:scale-110 hover:-translate-y-2 hover:bg-primary hover:text-secondary relative overflow-hidden">
+                class="w-8 h-8 md:w-10 md:h-10 inline-flex items-center justify-center rounded-full mx-1 md:mx-2 transition-all duration-300 ease-in-out hover:scale-110 hover:-translate-y-2 hover:bg-primary hover:text-secondary relative overflow-hidden animate-on-scroll">
                 <lord-icon
                     src="https://cdn.lordicon.com/fgctxlnd.json"
                     trigger="hover"
                     state="hover-draw"
                     colors="primary:#ffffff,secondary:#b4b4b4"
-                    style="width:60%;height:60%;position:absolute">
+                    style="width:60%;height:60%">
                 </lord-icon>
                 </a>
                 
                 <a href="https://github.com/adq1p89" 
-                class="w-8 h-8 md:w-10 md:h-10 inline-flex items-center justify-center rounded-full mx-1 md:mx-2 transition-all duration-300 ease-in-out hover:scale-110 hover:-translate-y-2 hover:bg-primary hover:text-secondary relative overflow-hidden">
+                class="w-8 h-8 md:w-10 md:h-10 inline-flex items-center justify-center rounded-full mx-1 md:mx-2 transition-all duration-300 ease-in-out hover:scale-110 hover:-translate-y-2 hover:bg-primary hover:text-secondary relative overflow-hidden animate-on-scroll">
                 <lord-icon
                     src="https://cdn.lordicon.com/ioihllwu.json"
                     trigger="hover"
                     colors="primary:#082c41,secondary:#ffffff"
-                    style="width:80%;height:80%;position:absolute">
+                    style="width:80%;height:80%">
                 </lord-icon>
                 </a>
                 
                 <a href="https://www.instagram.com/ad_himz/" 
-                class="w-8 h-8 md:w-10 md:h-10 inline-flex items-center justify-center rounded-full mx-1 md:mx-2 transition-all duration-300 ease-in-out hover:scale-110 hover:-translate-y-2 hover:bg-primary hover:text-secondary relative overflow-hidden">
+                class="w-8 h-8 md:w-10 md:h-10 inline-flex items-center justify-center rounded-full mx-1 md:mx-2 transition-all duration-300 ease-in-out hover:scale-110 hover:-translate-y-2 hover:bg-primary hover:text-secondary relative overflow-hidden animate-on-scroll">
                 <lord-icon
                     src="https://cdn.lordicon.com/wgtaryar.json"
                     trigger="morph"
-                    colors="primary:#ffffff,secondary:#ffbf9b,tertiary:#ffffff,quaternary:#ffbf9b"
-                    style="width:70%;height:70%;position:absolute">
+                    colors="primary:#ffffff,secondary:#082c41,tertiary:#ffffff,quaternary:#082c41"
+                    style="width:70%;height:70%">
+                </lord-icon>
+                </a>
+
+                <a href="https://youtube.com/@abdularfwm?si=H47RCo5JLUujl1hK" 
+                class="w-8 h-8 md:w-10 md:h-10 inline-flex items-center justify-center rounded-full mx-1 md:mx-2 transition-all duration-300 ease-in-out hover:scale-110 hover:-translate-y-2 hover:bg-primary hover:text-secondary relative overflow-hidden animate-on-scroll">
+                <lord-icon
+                    src="https://cdn.lordicon.com/dbcganmh.json"
+                    trigger="morph"
+                    colors="primary:#082c41,secondary:#ffffff,tertiary:#ffffff"
+                    style="width:70%;height:70%">
                 </lord-icon>
                 </a>
             </div>
 
             <ul class="list m-0 p-0 text-base md:text-lg leading-normal text-center mb-0">
-                <li class="inline-block px-2 md:px-4"><a href="index.html" class="text-white">Home</a></li>
-                <li class="inline-block px-2 md:px-4"><a href="AboutMe.html" class="text-white">About Me</a></li>
-                <li class="inline-block px-2 md:px-4"><a href="Services.html" class="text-white">Services</a></li>
-                <li class="inline-block px-2 md:px-4"><a href="Projects.html" class="text-white">Projects</a></li>
-                <li class="inline-block px-2 md:px-4"><a href="Contacts.html" class="text-white">Contact</a></li>
+                <li class="inline-block px-2 md:px-4"><a href="index.html" class="text-white animate-on-scroll">Home</a></li>
+                <li class="inline-block px-2 md:px-4"><a href="About Me.html" class="text-white animate-on-scroll">About Me</a></li>
+                <li class="inline-block px-2 md:px-4"><a href="Projects.html" class="text-white animate-on-scroll">Projects</a></li>
             </ul>
-            <p class="copyright mt-8 md:mt-12 text-center text-sm md:text-base text-white pb-4">
-                2025&nbsp;&nbsp;&nbsp;© Ad_himZ&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;All Rights Reserved
+            <p class="copyright mt-8 md:mt-12 text-center text-sm md:text-base text-white pb-4 animate-on-scroll">
+                © 2025 Ad_himZ&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;All Rights Reserved
             </p>
         </footer>
     </div>
@@ -803,8 +860,19 @@
                 const dropDownMenu = document.querySelector('.dropdown_menu');
                 
                 btnBar.onclick = function() {
-                    dropDownMenu.classList.toggle('h-[210px]');
-                    dropDownMenu.classList.toggle('hidden');
+                    if (dropDownMenu.classList.contains('h-0')) {
+                        dropDownMenu.classList.remove('h-0');
+                        dropDownMenu.classList.add('h-[210px]'); // Sesuaikan height jika perlu
+                        dropDownMenu.classList.remove('hidden');
+                    } else {
+                        dropDownMenu.classList.add('h-0');
+                        dropDownMenu.classList.remove('h-[210px]');
+                        // Tambahkan event listener untuk 'transitionend' agar 'hidden' ditambahkan setelah transisi selesai
+                        dropDownMenu.addEventListener('transitionend', function handler() {
+                            dropDownMenu.classList.add('hidden');
+                            dropDownMenu.removeEventListener('transitionend', handler);
+                        });
+                    }
                     
                     const isOpen = dropDownMenu.classList.contains('h-[210px]');
                     btnBarIcon.classList = isOpen 
@@ -845,6 +913,111 @@
                         prevEl: '.swiper-button-prev',
                     },
                 });
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const btnBar = document.querySelector('.btn_bar');
+            const btnBarIcon = document.querySelector('.btn_bar i');
+            const dropDownMenu = document.querySelector('.dropdown_menu');
+            
+            btnBar.onclick = function() {
+                const isOpen = dropDownMenu.classList.toggle('h-[150px]');
+                dropDownMenu.classList.toggle('h-0');
+                dropDownMenu.classList.toggle('hidden', !isOpen);
+                btnBarIcon.className = isOpen ? 'fa-solid fa-xmark' : 'fa-solid fa-bars';
+            }
+
+            // Custom Cursor Logic
+            const dotCursorEl = document.querySelector('.custom-dot-cursor');
+            if(dotCursorEl) {
+                let mouseX = 0, mouseY = 0, cursorX = 0, cursorY = 0;
+                const delay = 0.12;
+                // Define your primary and secondary colors here
+                const primaryColor = '#FFBF9B';
+                const secondaryColor = '#082c41';
+
+                /**
+                 * Helper function to get the background color of an element,
+                 * traversing up the DOM if the element's background is transparent.
+                 */
+                function getBackgroundColor(element) {
+                    let currentElement = element;
+                    while (currentElement) {
+                        const color = window.getComputedStyle(currentElement).backgroundColor;
+                        if (color && color !== 'rgba(0, 0, 0, 0)' && color !== 'transparent') {
+                            return color;
+                        }
+                        currentElement = currentElement.parentElement;
+                    }
+                    return 'rgb(0, 0, 0)'; // Default to black if no color is found
+                }
+
+                /**
+                 * Helper function to calculate the luminance of an RGB color.
+                 * This helps determine if a color is "light" or "dark".
+                 */
+                function getLuminance(bgColor) {
+                    // Extract R, G, B values from 'rgb(r, g, b)' string
+                    const rgb = bgColor.match(/\d+/g);
+                    if (!rgb) return 0;
+                    
+                    const r = parseInt(rgb[0]);
+                    const g = parseInt(rgb[1]);
+                    const b = parseInt(rgb[2]);
+
+                    // Formula for perceived brightness
+                    return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+                }
+                
+                document.addEventListener('mousemove', (e) => {
+                    mouseX = e.clientX;
+                    mouseY = e.clientY;
+
+                    // Hide original cursor so only custom one is visible
+                    // And get the element under the mouse
+                    const elementUnderCursor = document.elementFromPoint(mouseX, mouseY);
+                    if (elementUnderCursor) {
+                        
+                        // Get its computed background color
+                        const bgColor = getBackgroundColor(elementUnderCursor);
+                        
+                        // Calculate luminance
+                        const luminance = getLuminance(bgColor);
+                        
+                        // Set cursor color based on luminance
+                        // A threshold of 140 is a good starting point
+                        if (luminance > 140) {
+                            // Background is LIGHT, so cursor should be DARK (secondary)
+                            dotCursorEl.style.backgroundColor = secondaryColor;
+                        } else {
+                            // Background is DARK, so cursor should be LIGHT (primary)
+                            dotCursorEl.style.backgroundColor = primaryColor;
+                        }
+                    }
+                });
+
+                function updateDotCursor() {
+                    cursorX += (mouseX - cursorX) * delay;
+                    cursorY += (mouseY - cursorY) * delay;
+                    dotCursorEl.style.transform = `translate3d(${cursorX - (dotCursorEl.offsetWidth / 2)}px, ${cursorY - (dotCursorEl.offsetHeight / 2)}px, 0)`;
+                    requestAnimationFrame(updateDotCursor);
+                }
+                requestAnimationFrame(updateDotCursor);
+                
+                document.querySelectorAll('a, button, [onclick], .skill-card, .home_img img').forEach(el => {
+                    el.addEventListener('mouseenter', () => dotCursorEl.classList.add('hovered'));
+                    el.addEventListener('mouseleave', () => dotCursorEl.classList.remove('hovered'));
+                });
+            }
+
+            // Intersection Observer for scroll animations
+            const animatedElements = document.querySelectorAll('.animate-on-scroll');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    entry.target.classList.toggle('in-view', entry.isIntersecting);
+                });
+            }, { threshold: 0.2 });
+            animatedElements.forEach(el => observer.observe(el));
+        });
     </script>
 </body>
 </html>
